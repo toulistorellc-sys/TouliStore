@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#111a2e"><title>Touli Store — Make it personal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;700;800&family=Dancing+Script:wght@600;700&display=swap');
+:root{--ink:#111a2e;--orange:#ff7900;--cream:#fff8f0;--muted:#697386;--line:#e6e2dc;--bg:#f4f2ef;--white:#fff;--green:#0a7d4b;--shadow:0 10px 36px #1118271a}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:15px}
+a{color:inherit}button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
+.ic{width:1.1em;height:1.1em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.2em}
+/* header */
+.topline{background:#0b1220;color:#fff;text-align:center;padding:7px 12px;font-size:12px;letter-spacing:.05em}
+.header{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff}
+.hrow{max-width:1280px;margin:auto;padding:10px 18px;display:flex;align-items:center;gap:14px}
+.logoa{background:#fff;border-radius:10px;padding:4px 10px;display:flex}.logo{height:38px;width:auto;display:block}
+.search{flex:1;display:flex;border-radius:10px;overflow:hidden;background:#fff;min-width:0}
+.search select{border:0;background:#f1eee9;padding:0 10px;font-size:12px;color:var(--ink);border-right:1px solid var(--line);max-width:120px}
+.search input{flex:1;border:0;padding:12px 14px;font-size:14px;min-width:0;outline:0;color:var(--ink)}
+.search button{border:0;background:var(--orange);color:#fff;padding:0 18px}.search .ic{width:20px;height:20px}
+.hbtn{background:none;border:0;color:#fff;display:flex;flex-direction:column;align-items:flex-start;line-height:1.2;padding:6px 8px;border-radius:8px;text-decoration:none;font-size:11px;white-space:nowrap}
+.hbtn:hover{outline:1px solid #ffffff55}.hbtn b{font-size:13px}
+.cartb{flex-direction:row;align-items:center;gap:6px}.cartb .ic{width:26px;height:26px}.cartb .n{background:var(--orange);color:#fff;border-radius:20px;font-size:11px;font-weight:800;padding:1px 7px}
+.lang{position:relative}.lang button.cur{background:none;border:1px solid #ffffff33;border-radius:8px;padding:6px 8px;display:flex;align-items:center;gap:5px;color:#fff;opacity:.75;font-size:11px}
+.lang button.cur:hover{opacity:1}.flag{width:18px;height:13px;object-fit:cover;border-radius:2px;display:block}
+.langmenu{position:absolute;right:0;top:110%;background:#fff;color:var(--ink);border-radius:10px;box-shadow:var(--shadow);padding:6px;display:none;min-width:130px}.langmenu.open{display:block}
+.langmenu button{display:flex;gap:8px;align-items:center;width:100%;border:0;background:none;padding:8px 10px;border-radius:7px;font-size:13px;text-align:left}.langmenu button:hover{background:var(--bg)}
+.subnav{background:#1b2740;color:#fff}.subnav div{max-width:1280px;margin:auto;padding:0 18px;display:flex;gap:6px;overflow:auto;scrollbar-width:none}
+.subnav a{padding:10px 12px;font-size:13px;font-weight:600;text-decoration:none;white-space:nowrap;border-radius:6px}.subnav a:hover{background:#ffffff1f}
+/* layout */
+#app{min-height:70vh}.wrap{max-width:1280px;margin:auto;padding:22px 18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:30px;padding:12px 22px;background:var(--orange);color:#fff;font-weight:800;text-decoration:none;transition:.2s}
+.btn:hover{filter:brightness(1.07);transform:translateY(-1px)}.btn.dark{background:var(--ink)}.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}.btn.block{width:100%}.btn[disabled]{opacity:.5;pointer-events:none}
+.card{background:#fff;border-radius:16px;padding:22px;box-shadow:0 1px 8px #1118270d}
+h1,h2,h3{font-family:Manrope,sans-serif;letter-spacing:-.02em;margin:0 0 10px}
+.muted{color:var(--muted)}.small{font-size:12px;color:var(--muted)}
+.crumbs{font-size:12px;color:var(--muted);margin-bottom:14px}.crumbs a{text-decoration:none}.crumbs a:hover{text-decoration:underline}
+/* hero */
+.hero{background:linear-gradient(112deg,#fff8f0,#ffe9d0 60%,#f9d9b9);overflow:hidden}
+.hero-in{max-width:1280px;margin:auto;padding:54px 22px;display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center}
+.eyebrow{color:#d86a00;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+.hero h1{font-size:clamp(38px,5vw,64px);line-height:1.03;letter-spacing:-.05em;margin:14px 0}.hero h1 span{color:var(--orange)}.hero p{color:#596273;line-height:1.7;max-width:480px;font-size:16px}
+.hero-art{position:relative;min-height:330px}.hero-art img{position:absolute;object-fit:cover;border:8px solid #fff;border-radius:18px;box-shadow:var(--shadow)}
+.hero-art img:nth-child(1){width:50%;height:270px;left:0;top:22px;transform:rotate(-7deg)}.hero-art img:nth-child(2){width:44%;height:235px;right:2%;top:0;transform:rotate(6deg)}.hero-art img:nth-child(3){width:46%;height:195px;right:14%;bottom:0;transform:rotate(-2deg)}
+.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:-34px;position:relative;z-index:2}
+.catcard{background:#fff;border-radius:16px;padding:18px;box-shadow:var(--shadow);text-decoration:none}.catcard h3{font-size:17px}
+.catcard .imgs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.catcard img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;background:#eee}.catcard span{color:#0a6ab5;font-size:13px;font-weight:600}
+.trust{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:26px 0}.trust div{background:#fff;border-radius:14px;padding:16px;display:flex;gap:12px;align-items:center;font-size:13px;font-weight:700}.trust .ic{width:28px;height:28px;color:var(--orange);flex:none}
+.sechead{display:flex;justify-content:space-between;align-items:end;margin:30px 0 14px}.sechead h2{font-size:26px;margin:0}.sechead a{color:#0a6ab5;font-size:13px;font-weight:600}
+/* product grid */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.pc{background:#fff;border-radius:16px;overflow:hidden;text-decoration:none;display:flex;flex-direction:column;box-shadow:0 1px 8px #1118270d;transition:.2s}.pc:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.pc .im{aspect-ratio:1/1;background:#f3f0ec;overflow:hidden;position:relative}.pc .im img{width:100%;height:100%;object-fit:cover;transition:.4s}.pc:hover .im img{transform:scale(1.05)}
+.tag{position:absolute;top:10px;left:10px;background:#fff;border-radius:30px;padding:5px 10px;font-size:10px;font-weight:800;color:#d76500}
+.pc .in{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}.pc h3{font-size:15px;margin:0;font-family:'DM Sans'}
+.price{font-size:20px;font-weight:800}.price small{font-size:12px;font-weight:600;color:var(--muted)}
+.stars{color:#f5a300;font-size:13px;letter-spacing:1px}
+.pill{display:inline-flex;gap:6px;align-items:center;background:#fff2e4;color:#bd5900;border-radius:7px;padding:4px 8px;font-size:11px;font-weight:800;width:fit-content}
+/* shop */
+.shop{display:grid;grid-template-columns:230px 1fr;gap:22px}.side{background:#fff;border-radius:16px;padding:18px;height:fit-content;position:sticky;top:130px}
+.side h4{margin:14px 0 8px;font-size:13px}.side h4:first-child{margin-top:0}.side a{display:block;padding:5px 0;font-size:13px;text-decoration:none;color:#334}.side a.on{font-weight:800;color:var(--orange)}
+.side label{display:flex;gap:8px;align-items:center;font-size:13px;padding:4px 0}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px;flex-wrap:wrap}.toolbar select{border:1px solid var(--line);border-radius:8px;padding:8px;background:#fff}
+/* product page */
+.pp{display:grid;grid-template-columns:1.05fr 1fr;gap:34px}.gal{position:sticky;top:130px;height:fit-content}
+.gmain{background:#fff;border-radius:18px;overflow:hidden;aspect-ratio:1;position:relative}.gmain img{width:100%;height:100%;object-fit:cover}
+.gtabs{display:flex;gap:8px;margin-bottom:10px}.gtabs button{border:1px solid var(--line);background:#fff;border-radius:30px;padding:7px 14px;font-size:12px;font-weight:700}.gtabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.prev{aspect-ratio:1;border-radius:18px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:inset 0 0 0 1px var(--line);transition:background .25s}
+.prev .shape{width:62%;height:74%;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:14px;position:relative;box-shadow:0 14px 34px #0003;transition:background .25s;overflow:hidden}
+.prev .shape.round{border-radius:26px}.prev .shape.wide{width:78%;height:56%}.prev .shape.tall{width:36%;height:84%;border-radius:20px}
+.prev .ph{width:84%;flex:1;min-height:0;border-radius:12px;background:#ffffff40 center/cover no-repeat;border:2px dashed #ffffff90;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;text-align:center;padding:6px}
+.prev .ph.has{border:0}.prev .tx{font-family:'Dancing Script',cursive;font-size:30px;line-height:1.05;text-align:center;word-break:break-word;max-width:100%}
+.prev .note{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:11px;color:#667}
+.pi h1{font-size:28px;line-height:1.15}.pi .ratingrow{display:flex;gap:8px;align-items:center;margin:6px 0 12px;font-size:13px}
+.pi .big{font-size:32px;font-weight:800}.opt{margin:18px 0}.opt>label{font-weight:700;font-size:13px;display:block;margin-bottom:8px}.opt>label span{font-weight:500;color:var(--muted)}
+.sw{display:flex;gap:10px;flex-wrap:wrap}.sw button{width:36px;height:36px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #bbb;padding:0}.sw button.on{box-shadow:0 0 0 3px var(--orange)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chips button{border:1px solid #ccc;background:#fff;border-radius:9px;padding:9px 14px;font-size:13px;font-weight:600}.chips button.on{border-color:var(--orange);background:#fff2e4;color:#b35300}
+.field{width:100%;border:1px solid #cfc9c0;border-radius:10px;padding:12px;background:#fff}textarea.field{min-height:76px;resize:vertical}
+.buybox{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:18px}.buybox .row{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.qtysel{display:inline-flex;align-items:center;border:1px solid #ccc;border-radius:30px;overflow:hidden;background:#fff}.qtysel button{border:0;background:none;width:34px;height:34px;font-size:18px}.qtysel span{min-width:28px;text-align:center;font-weight:700}
+.green{color:var(--green);font-weight:700}.tabs-sec{margin-top:36px}
+.det li{margin:6px 0;line-height:1.5}
+.reviews{display:grid;grid-template-columns:260px 1fr;gap:26px}.rev{border-bottom:1px solid var(--line);padding:14px 0}
+/* cart */
+.cartpg{display:grid;grid-template-columns:1fr 330px;gap:22px;align-items:start}
+.cl{display:grid;grid-template-columns:96px 1fr auto;gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}.cl img{width:96px;height:96px;border-radius:12px;object-fit:cover;background:#eee}
+.cl h4{margin:0 0 4px;font-size:15px}.cl .opts{font-size:12px;color:var(--muted);line-height:1.6}.cl .acts{display:flex;gap:14px;align-items:center;margin-top:8px;font-size:12px}.cl .acts a{color:#0a6ab5;cursor:pointer}
+.sum .r{display:flex;justify-content:space-between;padding:6px 0;font-size:14px}.sum .t{font-weight:800;font-size:19px;border-top:1px solid var(--line);margin-top:8px;padding-top:12px}
+.bar{height:8px;border-radius:8px;background:#eee;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:var(--green)}
+/* checkout */
+.cochead{background:#fff;border-bottom:1px solid var(--line)}.cochead div{max-width:1000px;margin:auto;padding:12px 18px;display:flex;justify-content:space-between;align-items:center}
+.cogrid{display:grid;grid-template-columns:1fr 340px;gap:22px;align-items:start}.step{background:#fff;border-radius:14px;margin-bottom:14px;border:1px solid var(--line)}
+.step>.sh{display:flex;justify-content:space-between;padding:16px 20px;font-weight:800;gap:10px}.step>.sh .num{color:var(--orange);margin-right:8px}.step .sb{padding:0 20px 20px}.step.lock .sb{display:none}.step.lock{opacity:.6}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.fl{display:block;font-size:12px;font-weight:700;margin-bottom:12px}.fl .field{margin-top:5px;font-weight:400}
+.radio{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer}.radio.on{border-color:var(--orange);background:#fff8f0}.radio b{display:block}
+#pay{margin:14px 0;min-height:48px}.secure{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted);margin-top:10px}.secure .ic{color:var(--green)}
+/* auth */
+.auth{max-width:420px;margin:30px auto}.auth .field{margin-bottom:12px}.sso{display:flex;gap:10px;align-items:center;justify-content:center;width:100%;border:1px solid #ccc;background:#fff;border-radius:30px;padding:12px;font-weight:700;margin-bottom:10px}
+.sso:hover{background:var(--bg)}.sso.ap{background:#000;color:#fff;border-color:#000}.sep{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;margin:14px 0}.sep:before,.sep:after{content:"";flex:1;height:1px;background:var(--line)}
+.err{color:#c0262d;font-size:12px;margin:-4px 0 10px}
+/* info pages */
+.doc{max-width:820px;margin:auto}.doc h1{font-size:34px}.doc h3{margin-top:24px}.doc p,.doc li{line-height:1.75;color:#3b4457}
+.faq details{border-bottom:1px solid var(--line);padding:14px 0}.faq summary{font-weight:700;cursor:pointer}
+.crow{display:flex;gap:12px;align-items:center;padding:16px;border:1px solid var(--line);border-radius:14px;margin-top:12px;text-decoration:none;font-weight:700;background:#fff}.crow .ic{color:var(--orange);width:22px;height:22px}
+/* footer */
+.footer{background:#1b2740;color:#fff;margin-top:50px}.footer .top{text-align:center;padding:14px;background:#2a3857;font-size:13px;cursor:pointer}
+.fgrid{max-width:1100px;margin:auto;padding:44px 22px;display:grid;grid-template-columns:repeat(4,1fr);gap:30px}.fgrid h4{margin:0 0 12px;font-size:15px}.fgrid a{display:block;color:#c6ccda;text-decoration:none;font-size:13px;padding:5px 0}.fgrid a:hover{color:#fff;text-decoration:underline}
+.fend{border-top:1px solid #344056;padding:24px;text-align:center;font-size:12px;color:#aeb7c7}.fend .logoplate{display:inline-block;background:#fff;border-radius:14px;padding:8px 18px;margin-bottom:12px}.fend img{height:36px;display:block}
+.fend .soc{display:flex;gap:22px;justify-content:center;margin-bottom:14px}.fend .soc .ic{width:24px;height:24px}
+/* misc */
+.modal{position:fixed;inset:0;background:#10182799;z-index:50;display:none;align-items:center;justify-content:center;padding:18px}.modal.open{display:flex}
+.modalbox{background:#fff;border-radius:20px;padding:24px;max-width:480px;width:100%;max-height:90vh;overflow:auto}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#fff;padding:12px 20px;border-radius:30px;z-index:60;font-size:13px;transition:.25s;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}
+.empty{text-align:center;padding:60px 10px}.empty .ic{width:56px;height:56px;color:#bbb}
+.ok{width:72px;height:72px;border-radius:50%;background:#e4f6ec;color:var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}.ok .ic{width:38px;height:38px}
+@media(max-width:980px){.grid{grid-template-columns:repeat(3,1fr)}.cats{grid-template-columns:repeat(2,1fr)}.shop{grid-template-columns:1fr}.side{position:static}.pp,.cartpg,.cogrid,.reviews{grid-template-columns:1fr}.gal{position:static}.fgrid{grid-template-columns:1fr 1fr}.hero-in{grid-template-columns:1fr}.hero-art{max-width:520px;width:100%;margin:auto}}
+@media(max-width:640px){.hrow{flex-wrap:wrap;padding:8px 12px;gap:8px}.logo{height:30px}.search{order:5;flex-basis:100%}.search select{display:none}.hbtn .hide-m{display:none}.grid{grid-template-columns:repeat(2,1fr);gap:11px}.trust{grid-template-columns:repeat(2,1fr)}.pc .in{padding:10px}.pc h3{font-size:13px}.price{font-size:17px}.wrap{padding:16px 12px}.two{grid-template-columns:1fr}.hero-in{padding:36px 18px}.hero-art{min-height:250px}.hero-art img:nth-child(1){height:200px}.hero-art img:nth-child(2){height:180px}.hero-art img:nth-child(3){height:150px}.cl{grid-template-columns:72px 1fr}.cl img{width:72px;height:72px}.cl>.pr{grid-column:2}.fgrid{grid-template-columns:1fr}.catcard h3{font-size:14px}.cats{margin-top:-20px;gap:10px}}
+
+/* v2: logo plate, compact search, gallery, phone picker */
+.logoa{background:linear-gradient(135deg,#fffaf3,#ffe6c9);border-radius:14px;padding:5px 14px;box-shadow:0 0 0 2px #ff790066,0 4px 14px #0003}.logo{height:42px}
+.search{flex:0 1 460px;margin:0 auto;border-radius:999px;padding:3px 3px 3px 8px;align-items:center;box-shadow:0 2px 10px #0003}
+.search select{background:transparent;border:0;border-right:1px solid var(--line);font-size:12px;max-width:92px;padding:0 6px;height:30px}
+.search input{padding:8px 12px;font-size:13px}.search button{width:34px;height:34px;border-radius:50%;padding:0;display:flex;align-items:center;justify-content:center;flex:none}.search .ic{width:16px;height:16px}
+.fend .logoplate{background:linear-gradient(135deg,#fffaf3,#ffe6c9);box-shadow:0 0 0 2px #ff790066}
+.thumbs{display:flex;gap:10px;margin-top:12px;overflow:auto;scrollbar-width:thin}.thumbs button{width:68px;height:68px;flex:none;border:2px solid var(--line);border-radius:12px;background:#f3f0ec;padding:3px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:var(--muted)}.thumbs button.on{border-color:var(--orange)}.thumbs img,.thumbs .psvg{width:100%;height:100%;object-fit:cover}
+.prev .psvg{height:96%;width:auto;max-width:100%}.vlbl{position:absolute;top:10px;left:12px;font-size:11px;font-weight:800;background:#fff;border-radius:20px;padding:4px 10px;color:#d76500}
+.chips.brand button{min-width:96px}
+
+/* ===== v3: light 2026 header, transparent PNG logo sits directly on it ===== */
+:root{--bg:#faf7f2}
+.topline{background:linear-gradient(90deg,#ff7900,#ff9a2e 50%,#ff7900);color:#fff;font-weight:700;letter-spacing:.04em;padding:8px 12px;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
+.topline .ic{width:18px;height:18px;stroke-width:2}.topline .fs{background:#fff;color:#c75a00;border-radius:999px;padding:2px 12px;font-weight:800}.topline .pm{opacity:.95}
+.header{background:rgba(255,253,249,.88);-webkit-backdrop-filter:saturate(1.6) blur(14px);backdrop-filter:saturate(1.6) blur(14px);color:var(--ink);border-bottom:1px solid #eee6da;box-shadow:0 6px 24px #1a12060d}
+.hrow{padding:12px 20px;gap:18px}
+.logoa{background:none;box-shadow:none;border-radius:0;padding:0;display:flex;align-items:center}.logo{height:48px;width:auto}
+.search{flex:1 1 520px;max-width:620px;background:#fff;border:2px solid var(--orange);box-shadow:0 4px 16px #ff79001f;padding:3px 3px 3px 10px}
+.search select{color:var(--ink);border-right:1px solid #eee6da}
+.search button{background:linear-gradient(135deg,#ff8a1f,#ff6a00)}
+.hbtn{color:var(--ink)}.hbtn:hover{outline:0;background:#fff1e2}
+.cartb .ic{color:var(--ink)}
+.lang button.cur{color:var(--ink);border:1px solid #e6dccd;opacity:1;background:#fff}
+.subnav{background:#fff;border-top:1px solid #f0e9de;color:var(--ink)}
+.subnav a{color:#3b4458;border-radius:999px;margin:6px 0;padding:7px 14px}.subnav a:hover{background:#fff1e2;color:#c75a00}
+.fend .logoplate{background:#fff;box-shadow:0 0 0 2px #ff790066}
+@media(max-width:640px){.logo{height:34px}.hrow{padding:8px 12px}.search{flex-basis:100%;max-width:none}.topline{font-size:11px;gap:6px}}
+.gsi-wrap{display:flex;justify-content:center;margin-bottom:10px;min-height:44px}
+
+/* ===== v4: light footer, no plate behind logo, AI assistant, contact page ===== */
+.footer{background:linear-gradient(180deg,#fff6ea,#ffe8cf);color:var(--ink);margin-top:50px;border-top:1px solid #f1d9b9}
+.footer .top{background:linear-gradient(90deg,#ff7900,#ff9a2e);color:#fff;font-weight:700}
+.fgrid h4{color:var(--ink)}.fgrid a{color:#4a5368}.fgrid a:hover{color:#c75a00;text-decoration:none}
+.fgrid a.fai{display:inline-flex;gap:8px;align-items:center;background:#fff;border:1.5px solid var(--orange);color:#c75a00;font-weight:800;border-radius:999px;padding:9px 16px;margin-top:6px}.fgrid a.fai:hover{background:var(--orange);color:#fff}
+.fbadges{max-width:1100px;margin:auto;padding:0 22px 8px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.fbadges span{display:flex;gap:8px;align-items:center;background:#fff;border:1px solid #f1d9b9;border-radius:999px;padding:8px 14px;font-size:12px;font-weight:700;color:#3b4458}.fbadges .ic{color:var(--orange);width:18px;height:18px}
+.fend{border-top:1px solid #f1d9b9;color:#6b7388}.fend a{color:#6b7388}.fend .soc a{color:var(--ink)}
+.flogo{display:block;margin:0 auto 14px;height:58px;width:auto}
+/* contact page */
+.chelp{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:14px 0 22px}
+.chelp a{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:14px;text-decoration:none;font-weight:700;background:#fff;transition:.2s}.chelp a:hover{border-color:var(--orange);transform:translateY(-2px);box-shadow:var(--shadow)}.chelp .ic{color:var(--orange);width:22px;height:22px;flex:none}
+.cform{display:grid;gap:10px;margin:14px 0}.cform input,.cform select,.cform textarea{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff;width:100%}.cform textarea{min-height:110px;resize:vertical}
+.steps{counter-reset:s;list-style:none;padding:0;display:grid;gap:10px}.steps li{counter-increment:s;display:flex;gap:12px;align-items:flex-start;line-height:1.5}.steps li:before{content:counter(s);background:var(--orange);color:#fff;font-weight:800;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex:none;font-size:13px}
+/* AI assistant */
+#aiFab{position:fixed;right:18px;bottom:18px;z-index:45;display:flex;gap:8px;align-items:center;border:0;border-radius:999px;padding:13px 20px;background:linear-gradient(135deg,#ff8a1f,#ff6a00);color:#fff;font-weight:800;box-shadow:0 10px 30px #ff79004d;transition:.2s}#aiFab:hover{transform:translateY(-2px)}#aiFab .ic{width:20px;height:20px}
+#aiBox{position:fixed;right:18px;bottom:18px;z-index:46;width:min(390px,calc(100vw - 24px));height:min(600px,calc(100vh - 36px));background:#fff;border-radius:22px;box-shadow:0 24px 70px #1a12062e,0 0 0 1px #eee6da;display:none;flex-direction:column;overflow:hidden}#aiBox.open{display:flex}
+.aih{background:linear-gradient(135deg,#ff8a1f,#ff6a00);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px}.aih .av{width:36px;height:36px;border-radius:50%;background:#fff;color:var(--orange);display:flex;align-items:center;justify-content:center}.aih b{display:block}.aih small{opacity:.9}.aih button{margin-left:auto;background:#ffffff33;border:0;border-radius:50%;width:32px;height:32px;color:#fff;font-size:18px}
+#aiMsgs{flex:1;overflow:auto;padding:14px;background:#faf7f2;display:flex;flex-direction:column;gap:10px}
+.aib{max-width:88%;padding:11px 14px;border-radius:16px;font-size:14px;line-height:1.55;box-shadow:0 1px 4px #1a12060d}.aib.bot{background:#fff;border-bottom-left-radius:4px;align-self:flex-start}.aib.me{background:var(--ink);color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.aib a.crow{margin-top:8px;padding:11px;font-size:13px}.aib .steps{margin:8px 0}.aib h4{margin:0 0 6px;font-size:14px}
+.aiq{display:flex;gap:7px;flex-wrap:wrap}.aiq button{border:1.5px solid #ffcf9f;background:#fff;color:#b35300;border-radius:999px;padding:8px 13px;font-size:12.5px;font-weight:700}.aiq button:hover{background:#fff1e2}.aiq button.p{background:var(--orange);color:#fff;border-color:var(--orange)}
+.aif{display:flex;gap:8px;padding:10px;border-top:1px solid #eee6da;background:#fff}.aif input{flex:1;border:1px solid var(--line);border-radius:999px;padding:11px 15px;min-width:0;outline:0}.aif input:focus{border-color:var(--orange)}.aif button{border:0;background:var(--orange);color:#fff;border-radius:50%;width:42px;height:42px;font-size:18px}
+@media(max-width:640px){#aiBox{right:8px;bottom:8px;height:calc(100vh - 16px);border-radius:18px}#aiFab span{display:none}#aiFab{padding:14px}}
+
+/* v5: easier tap targets */
+.btn{min-height:48px}.subnav a{padding:11px 16px}.fgrid a{padding:10px 0}.hbtn{min-height:44px}.chips button{min-height:42px}.sw button{width:42px;height:42px}.qtysel button{width:42px;height:42px}
+.catcard,.pc{-webkit-tap-highlight-color:#ff790033}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+<symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2l2.5 11h10l2-8H6.500"/><circle cx="9" cy="19.500" r="1.500"/><circle cx="17" cy="19.500" r="1.500"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+<symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-8-5-8-11a4.500 4.500 0 0 1 8-2.500A4.500 4.500 0 0 1 20 9c0 6-8 11-8 11z"/></symbol>
+<symbol id="i-pen" viewBox="0 0 24 24"><path d="m4 20 4-1L19 8l-3-3L5 16z"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="i-truck" viewBox="0 0 24 24"><path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17.500" r="1.500"/><circle cx="17" cy="17.500" r="1.500"/></symbol>
+<symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="5"/><path d="M5 13v8h14v-8M12 8v13M12 8C9 8 8 4 10.500 4S12 8 12 8zm0 0c3 0 4-4 1.500-4S12 8 12 8z"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></symbol>
+<symbol id="i-tel" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.500 1.500a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+<symbol id="i-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.500 6.500v.01"/></symbol>
+<symbol id="i-fb" viewBox="0 0 24 24"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8z"/></symbol>
+<symbol id="i-tt" viewBox="0 0 24 24"><path d="M14 3v11.500a3.500 3.500 0 1 1-3.500-3.500M14 3c.5 3 2.500 4.500 5 4.500"/></symbol>
+<symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/></symbol>
+<symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l1 13H4z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></symbol>
+</defs></svg>
+
+<div class="topline" id="topline"></div>
+<header class="header"><div class="hrow">
+<a class="logoa" href="#/"><img class="logo" src="assets/logo.png" alt="Touli Store"></a>
+<form class="search" id="sf" onsubmit="doSearch(event)"><select id="scat"></select><input id="sq" type="search" autocomplete="off"><button aria-label="Search"><svg class="ic"><use href="#i-search"/></svg></button></form>
+<div class="lang"><button class="cur" id="langcur" onclick="document.getElementById('langmenu').classList.toggle('open')" aria-label="Language"></button><div class="langmenu" id="langmenu"></div></div>
+<a class="hbtn" id="acct" href="#/account"></a>
+<a class="hbtn cartb" href="#/cart" aria-label="Cart"><svg class="ic"><use href="#i-cart"/></svg><span class="n" id="cn">0</span><b class="hide-m" id="cartlbl"></b></a>
+</div><nav class="subnav"><div id="subnav"></div></nav></header>
+
+<main id="app"></main>
+
+<footer class="footer" id="footer"></footer>
+<div class="toast" id="toast"></div>
+<div class="modal" id="adminModal" onclick="if(event.target===this)this.classList.remove('open')"><div class="modalbox"><h3>Store editor · Demo</h3><p class="small">Change prices and bonus offers on this device only.</p><div id="adminFields"></div><button class="btn block" onclick="saveAdmin()">Save</button><button class="btn ghost block" style="margin-top:8px" onclick="localStorage.removeItem('touliProducts');location.reload()">Reset</button></div></div>
+
+<script>
+/* ================= CONFIG ================= */
+const PAYPAL_CLIENT_ID='';      // paste your PayPal client ID → real card + PayPal payments
+const GOOGLE_CLIENT_ID='';      // add for real "Continue with Google"
+const APPLE_CLIENT_ID='';       // add for real "Continue with Apple"
+const STORE={email:'toulistorellc@gmail.com',phone:'(641) 244-1865',tel:'+16412441865',freeShip:50,std:4.99,exp:12.99};
+
+/* ================= DATA ================= */
+const CATS=['Drinkware','Apparel','Prints','Accessories','Bags'];
+const CL={black:['Black','#16181d'],white:['White','#ffffff'],pink:['Pink','#f4a6c0'],blue:['Blue','#4a90d9'],red:['Red','#d93a3a'],navy:['Navy','#1c2b4a'],purple:['Purple','#8a2fb5'],natural:['Natural','#efe6d3'],clear:['Clear','#dfe9ee'],teal:['Teal','#2f9aa8'],gold:['Gold','#d8a82f']};
+const SZ=['S','M','L','XL','2XL'];
+let products=[
+{id:1,name:'Personalized Tumbler 20oz',cat:'Drinkware',price:24.99,bonus:'Free name personalization',img:'assets/tumbler.jpg',desc:'A stainless steel tumbler printed with your photo and name.',colors:['white','black','pink','purple'],colorLabel:'Tumbler color',sizes:[['20 oz',0],['30 oz',5]],shape:'tall',det:['Double-wall insulated stainless steel','Full-wrap photo & text print','Lid and straw included','Hand wash recommended']},
+{id:2,name:'Photo Canvas Print',cat:'Prints',price:39.99,bonus:'Bonus digital preview',img:'assets/canvas.jpg',desc:'Turn your favorite photo into wall art.',colors:[],sizes:[['8×10 in',0],['12×16 in',15],['16×20 in',30],['20×30 in',55]],shape:'wide',det:['Gallery-wrapped canvas on wooden frame','Fade-resistant ink','Ready to hang','Digital preview sent before printing']},
+{id:3,name:'Custom Photo Phone Case',cat:'Accessories',price:22.99,bonus:'Free design placement',img:'assets/phone-case.jpg',desc:'Carry your favorite memories everywhere.',colors:['black','white','clear','pink','blue'],colorLabel:'Case style / color',models:1,shape:'tall',det:['Slim protective case with raised edges','Photo printed edge to edge','Camera cut-out for your model','Scratch-resistant finish']},
+{id:4,name:'Personalized Ceramic Mug',cat:'Drinkware',price:16.99,bonus:'Free gift note',img:'assets/mug.jpg',desc:'A thoughtful everyday gift with your name or photo.',colors:['white','black','pink','blue','red'],colorLabel:'Mug / handle color',sizes:[['11 oz',0],['15 oz',3]],shape:'round',det:['Glossy ceramic, dishwasher safe','Wrap-around print','Microwave safe','Great for birthdays & holidays']},
+{id:5,name:'Custom Tote Bag',cat:'Bags',price:19.99,bonus:'Free name or date',img:'assets/tote.jpg',desc:'A reusable bag with your own design.',colors:['natural','black','navy'],colorLabel:'Bag color',shape:'round',det:['Sturdy cotton canvas','Long shoulder handles','Event favors & gifts','Bulk orders available']},
+{id:6,name:'Birthday Graphic T-Shirt',cat:'Apparel',price:21.99,bonus:'Free simple text edit',img:'assets/shirt.jpg',desc:'Celebrate in a shirt made for you.',colors:['black','white','pink','red','navy'],colorLabel:'Shirt color',sizes:SZ.map(s=>[s,s==='2XL'?3:0]),shape:'round',det:['Soft 100% cotton','Durable heat-press print','Unisex fit','Add a name, age or message']},
+{id:7,name:'Matching Couple T-Shirts (set of 2)',cat:'Apparel',price:39.99,bonus:'Free matching layout',img:'assets/couple-shirts.jpg',desc:'Matching shirts for your special moments.',colors:['white','black','navy','red'],colorLabel:'Shirt color',sizes:SZ.map(s=>[s,s==='2XL'?5:0]),shape:'round',det:['Set of two shirts','Soft 100% cotton','Matching layout designed for you','Perfect for birthdays, weddings & trips']},
+{id:8,name:'Custom Photo Banner',cat:'Prints',price:34.99,bonus:'Free layout consultation',img:'assets/banner.jpg',desc:'Make your event stand out.',colors:[],sizes:[['2×4 ft',0],['3×6 ft',20],['4×8 ft',45]],shape:'wide',det:['Heavy-duty vinyl','Grommets for easy hanging','Indoor & outdoor use','Layout help included']}
+,
+{id:9,name:'Custom Trucker Hat – Family Fist Bump',cat:'Accessories',price:19.99,bonus:'Free name on the hat',img:'assets/cap-papa.jpg',desc:'A trucker hat with your own design: Papa, kids\' names, a logo or any message.',colors:['black','white','navy','red'],colorLabel:'Hat color',shape:'round',det:['Foam front with breathable mesh back','Adjustable snapback strap','Add Papa, kids\' names, a logo or a message','Design shown is an example — we customize it for you']},
+{id:10,name:'Custom Fitted Cap (patches & pins)',cat:'Accessories',price:34.99,bonus:'Free patch placement',img:'assets/cap-fitted.jpg',desc:'A fully customized fitted cap with side patches, pins and hat clips of your choice.',colors:['white','black','navy','teal'],colorLabel:'Cap color',sizes:[['7',0],['7 1/4',0],['7 1/2',0],['7 3/4',0],['8',3]],shape:'round',det:['Two-tone fitted cap style','Side patches, chains, pins & hat clips available','Tell us your colors, logo or team theme','Design shown is an example — we customize it for you']},
+{id:11,name:'Custom Varsity Jacket',cat:'Apparel',price:54.99,bonus:'Free logo placement',img:'assets/varsity-jacket.jpg',desc:'Baseball-style varsity jacket with your logo, name or design on the front and back.',colors:['black','navy','red'],colorLabel:'Jacket body color',sizes:SZ.map(s=>[s,s==='2XL'?5:0]),shape:'round',det:['Snap-button front with ribbed collar, cuffs & hem','Contrast sleeves','Logo on the chest, on the back, or both','Great for teams, families, events & businesses']},
+{id:12,name:'Haiti Soccer Jersey – Blue',cat:'Apparel',price:29.99,bonus:'Free name & number',img:'assets/haiti-jersey-blue.jpg',desc:'Show your Haitian pride in a blue fan-style jersey with your own name and number.',colors:[],sizes:SZ.map(s=>[s,s==='2XL'?3:0]),shape:'round',det:['Lightweight, breathable sport fabric','Add your name and number on the back','Perfect for games, family gatherings & Haitian Flag Day','Unisex fit']},
+{id:13,name:'Haiti Soccer Jersey – White',cat:'Apparel',price:29.99,bonus:'Free name & number',img:'assets/haiti-jersey-white.jpg',desc:'White away-style fan jersey in red and blue — add your name and number.',colors:[],sizes:SZ.map(s=>[s,s==='2XL'?3:0]),shape:'round',det:['Lightweight, breathable sport fabric','Add your name and number on the back','Perfect for games, family gatherings & Haitian Flag Day','Unisex fit']},
+{id:14,name:'Photo Tumbler 40oz with Handle',cat:'Drinkware',price:29.99,bonus:'Free photo & name layout',img:'assets/tumbler-40oz.jpg',desc:'Big 40 oz tumbler with handle, printed with your photo, a birthday message or a name.',colors:['natural','white','black','pink'],colorLabel:'Tumbler color',shape:'tall',det:['40 oz double-wall insulated stainless steel','Comfortable handle, lid and straw included','Photo, name and birthday message print','Perfect birthday & anniversary gift']},
+{id:15,name:'Custom Foldable Phone Case',cat:'Accessories',price:26.99,bonus:'Free design placement',img:'assets/fold-case.jpg',desc:'Slim protective case made for foldable phones, with your photo or design.',colors:['black','navy','white','clear'],colorLabel:'Case color',models:1,foldOnly:['iPhone Duo (2026)','Samsung Galaxy Z Fold8'],shape:'tall',det:['Made for foldable phones','Camera cut-out for your model','Photo or design printed on the back','Scratch-resistant finish']}
+];
+try{JSON.parse(localStorage.getItem('touliProducts')||'[]').forEach(s=>{let p=products.find(x=>x.id===s.id);if(p){p.price=s.price;p.bonus=s.bonus}})}catch(e){}
+
+/* ================= i18n ================= */
+const LANGS={en:['United States','us','English'],es:['España','es','Español'],fr:['France','fr','Français'],ht:['Haïti','ht','Kreyòl']};
+const T={
+en:{promo:'PERSONALIZED GIFTS • MADE TO MEAN MORE • FREE SHIPPING · USA ONLY',search:'Search personalized gifts…',all:'All',hello:'Hello, sign in',acctL:'Account & Orders',cart:'Cart',shop:'Shop',allGifts:'All gifts',home:'Home',addCart:'Add to cart',buyNow:'Buy now',qty:'Quantity',color:'Color',size:'Size',model:'Phone model',yourText:'Your name or message',yourPhoto:'Upload your photo',preview:'Your design preview',photo:'Product photo',desc:'About this item',reviews:'Customer reviews',noRev:'No reviews yet. Be the first to review this product.',writeRev:'Write a review',similar:'Similar products',viewAll:'See all',sub:'Subtotal',ship:'Shipping',total:'Total',free:'FREE',checkout:'Proceed to checkout',empty:'Your cart is empty',keep:'Continue shopping',remove:'Remove',signIn:'Sign in',create:'Create account',email:'Email',pw:'Password',name:'Full name',google:'Continue with Google',apple:'Continue with Apple',or:'or use your email',out:'Sign out',orders:'Your orders',placed:'Place your order',thanks:'Thank you! Your order is confirmed',stepA:'Shipping address',stepD:'Delivery option',stepP:'Payment',stepR:'Review items',secure:'Secure checkout — we never store your card details.',sort:'Sort by',feat:'Featured',lo:'Price: low to high',hi:'Price: high to low',results:'results',help:'Help Center',stdd:'Standard delivery',expd:'Express delivery'},
+es:{promo:'REGALOS PERSONALIZADOS • ENVÍO GRATIS · SOLO EE. UU.',search:'Buscar regalos personalizados…',all:'Todo',hello:'Hola, inicia sesión',acctL:'Cuenta y pedidos',cart:'Carrito',shop:'Tienda',allGifts:'Todos los regalos',home:'Inicio',addCart:'Añadir al carrito',buyNow:'Comprar ahora',qty:'Cantidad',color:'Color',size:'Talla',model:'Modelo de teléfono',yourText:'Tu nombre o mensaje',yourPhoto:'Sube tu foto',preview:'Vista previa de tu diseño',photo:'Foto del producto',desc:'Acerca de este artículo',reviews:'Opiniones de clientes',noRev:'Aún no hay opiniones. Sé el primero.',writeRev:'Escribir una opinión',similar:'Productos similares',viewAll:'Ver todo',sub:'Subtotal',ship:'Envío',total:'Total',free:'GRATIS',checkout:'Proceder al pago',empty:'Tu carrito está vacío',keep:'Seguir comprando',remove:'Eliminar',signIn:'Iniciar sesión',create:'Crear cuenta',email:'Correo',pw:'Contraseña',name:'Nombre completo',google:'Continuar con Google',apple:'Continuar con Apple',or:'o usa tu correo',out:'Cerrar sesión',orders:'Tus pedidos',placed:'Realizar pedido',thanks:'¡Gracias! Tu pedido está confirmado',stepA:'Dirección de envío',stepD:'Opción de entrega',stepP:'Pago',stepR:'Revisar artículos',secure:'Pago seguro — nunca guardamos los datos de tu tarjeta.',sort:'Ordenar por',feat:'Destacados',lo:'Precio: menor a mayor',hi:'Precio: mayor a menor',results:'resultados',help:'Centro de ayuda',stdd:'Entrega estándar',expd:'Entrega exprés'},
+fr:{promo:'CADEAUX PERSONNALISÉS • LIVRAISON GRATUITE · ÉTATS-UNIS UNIQUEMENT',search:'Rechercher des cadeaux personnalisés…',all:'Tout',hello:'Bonjour, connectez-vous',acctL:'Compte et commandes',cart:'Panier',shop:'Boutique',allGifts:'Tous les cadeaux',home:'Accueil',addCart:'Ajouter au panier',buyNow:'Acheter',qty:'Quantité',color:'Couleur',size:'Taille',model:'Modèle de téléphone',yourText:'Votre nom ou message',yourPhoto:'Ajoutez votre photo',preview:'Aperçu de votre création',photo:'Photo du produit',desc:'À propos de cet article',reviews:'Avis clients',noRev:'Aucun avis pour le moment. Soyez le premier.',writeRev:'Écrire un avis',similar:'Produits similaires',viewAll:'Tout voir',sub:'Sous-total',ship:'Livraison',total:'Total',free:'GRATUIT',checkout:'Passer la commande',empty:'Votre panier est vide',keep:'Continuer vos achats',remove:'Supprimer',signIn:'Se connecter',create:'Créer un compte',email:'E-mail',pw:'Mot de passe',name:'Nom complet',google:'Continuer avec Google',apple:'Continuer avec Apple',or:'ou utilisez votre e-mail',out:'Se déconnecter',orders:'Vos commandes',placed:'Passer la commande',thanks:'Merci ! Votre commande est confirmée',stepA:'Adresse de livraison',stepD:'Mode de livraison',stepP:'Paiement',stepR:'Vérifier les articles',secure:'Paiement sécurisé — nous ne gardons jamais vos données de carte.',sort:'Trier par',feat:'Sélection',lo:'Prix croissant',hi:'Prix décroissant',results:'résultats',help:'Centre d’aide',stdd:'Livraison standard',expd:'Livraison express'},
+ht:{promo:'KADO PèSONALIZE • LIVREZON GRATIS · ETAZINI SèLMAN',search:'Chèche kado pèsonalize…',all:'Tout',hello:'Bonjou, konekte',acctL:'Kont ak kòmand',cart:'Panye',shop:'Boutik',allGifts:'Tout kado',home:'Akèy',addCart:'Mete nan panye',buyNow:'Achte kounye a',qty:'Kantite',color:'Koulè',size:'Tay',model:'Modèl telefòn',yourText:'Non oswa mesaj ou',yourPhoto:'Voye foto ou',preview:'Apèsi desen ou',photo:'Foto pwodwi a',desc:'Konsènan atik sa a',reviews:'Kòmantè kliyan yo',noRev:'Poko gen kòmantè. Se ou ki premye.',writeRev:'Ekri yon kòmantè',similar:'Pwodwi ki sanble',viewAll:'Wè tout',sub:'Soutotal',ship:'Livrezon',total:'Total',free:'GRATIS',checkout:'Kontinye pou peye',empty:'Panye ou vid',keep:'Kontinye achte',remove:'Retire',signIn:'Konekte',create:'Kreye kont',email:'Imèl',pw:'Modpas',name:'Non konplè',google:'Kontinye ak Google',apple:'Kontinye ak Apple',or:'oswa itilize imèl ou',out:'Dekonekte',orders:'Kòmand ou yo',placed:'Pase kòmand lan',thanks:'Mèsi! Kòmand ou konfime',stepA:'Adrès livrezon',stepD:'Chwa livrezon',stepP:'Peman',stepR:'Revize atik yo',secure:'Peman sekirize — nou pa janm kenbe enfòmasyon kat ou.',sort:'Triye pa',feat:'Vedèt',lo:'Pri: piti rive gran',hi:'Pri: gran rive piti',results:'rezilta',help:'Sant èd',stdd:'Livrezon estanda',expd:'Livrezon ekspre'}
+};
+
+Object.assign(T.en,{freeUS:'Free shipping · USA only',customO:'Custom orders',top:'Back to top',from:'from',bonusL:'Bonus',vBack:'Back',vFront:'Front',vSide:'Side',vTop:'Top',vDetail:'Detail',vPrev:'Your design',vPhoto:'Photo',usNote:'Free standard shipping applies to addresses in the United States only.'});
+Object.assign(T.es,{freeUS:'Envío gratis · solo EE. UU.',customO:'Pedidos personalizados',top:'Volver arriba',from:'desde',bonusL:'Bono',vBack:'Reverso',vFront:'Frente',vSide:'Lateral',vTop:'Superior',vDetail:'Detalle',vPrev:'Tu diseño',vPhoto:'Foto',usNote:'El envío estándar gratuito aplica solo a direcciones en Estados Unidos.'});
+Object.assign(T.fr,{freeUS:'Livraison gratuite · États-Unis uniquement',customO:'Commandes personnalisées',top:'Haut de page',from:'dès',bonusL:'Bonus',vBack:'Dos',vFront:'Face',vSide:'Côté',vTop:'Dessus',vDetail:'Détail',vPrev:'Votre création',vPhoto:'Photo',usNote:'La livraison standard gratuite s’applique uniquement aux adresses aux États-Unis.'});
+Object.assign(T.ht,{freeUS:'Livrezon gratis · Etazini sèlman',customO:'Kòmand pèsonalize',top:'Monte anwo',from:'apati',bonusL:'Bonis',vBack:'Do',vFront:'Devan',vSide:'Kote',vTop:'Anlè',vDetail:'Detay',vPrev:'Desen ou',vPhoto:'Foto',usNote:'Livrezon estanda gratis la se pou adrès nan Etazini sèlman.'});
+let lang=localStorage.getItem('toulilang')||((navigator.language||'en').slice(0,2));if(!T[lang])lang='en';
+const t=k=>(T[lang]&&T[lang][k])||T.en[k]||k;
+const flag=c=>`<img class="flag" src="https://flagcdn.com/w40/${c}.png" alt="">`;
+const money=n=>'$'+Number(n).toFixed(2);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ic=n=>`<svg class="ic"><use href="#i-${n}"/></svg>`;
+const $=id=>document.getElementById(id);
+
+/* ================= STATE ================= */
+const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}};
+const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){toast('Storage full — try a smaller photo')}};
+let cart=load('touliCart',[]),user=load('touliUser',null),orders=load('touliOrders',[]),reviews=load('touliReviews',{});
+const total=()=>cart.reduce((a,b)=>a+b.price*b.qty,0);
+const count=()=>cart.reduce((a,b)=>a+b.qty,0);
+let draft={};   // current customizer state
+
+/* ================= CHROME ================= */
+function renderChrome(){
+ document.documentElement.lang=lang;$('topline').innerHTML=`${ic('truck')}<span class="fs">${t('freeUS')}</span><span class="pm">${t('promo')}</span>`;$('sq').placeholder=t('search');
+ $('scat').innerHTML=`<option value="">${t('all')}</option>`+CATS.map(c=>`<option>${c}</option>`).join('');
+ $('langcur').innerHTML=flag(LANGS[lang][1])+' '+lang.toUpperCase();
+ $('langmenu').innerHTML=Object.entries(LANGS).map(([k,v])=>`<button onclick="setLang('${k}')">${flag(v[1])} ${v[2]}</button>`).join('');
+ $('acct').innerHTML=`<span>${user?esc('Hello, '+user.name.split(' ')[0]):t('hello')}</span><b>${t('acctL')}</b>`;
+ $('cartlbl').textContent=t('cart');$('cn').textContent=count();
+ $('subnav').innerHTML=`<a href="#/shop">${t('allGifts')}</a>`+CATS.map(c=>`<a href="#/shop?cat=${c}">${c}</a>`).join('')+`<a href="#/page/custom">${t('customO')}</a><a href="#/page/help">${t('help')}</a>`;
+ $('footer').innerHTML=`<div class="top" onclick="scrollTo({top:0,behavior:'smooth'})">↑ ${t('top')}</div><div class="fgrid">
+ <div><h4>Shop</h4>${CATS.map(c=>`<a href="#/shop?cat=${c}">${c}</a>`).join('')}</div>
+ <div><h4>Customer service</h4><a href="#/page/shipping">Shipping &amp; delivery</a><a href="#/page/returns">Returns &amp; refunds</a><a href="#/page/custom">Custom orders</a><a href="#/page/faq">FAQ</a><a href="#/orders">Track your order</a></div>
+ <div><h4>Touli Store</h4><a href="#/page/about">About us</a><a href="#/page/contact">Contact</a><a href="#/page/privacy">Privacy policy</a><a href="#/page/terms">Terms of service</a></div>
+ <div><h4>${A('needHelp')}</h4><a href="#/page/contact">${A('contactUs')} →</a><a href="#/page/help">${t('help')}</a><a href="#" class="fai" onclick="aiOpen('person');return false">${ic('spark')} ${A('talkAI')}</a></div></div>
+ <div class="fbadges"><span>${ic('truck')} ${t('freeUS')}</span><span>${ic('lock')} ${A('secureB')}</span><span>${ic('gift')} ${A('madeB')}</span><span>${ic('heart')} ${A('loveB')}</span></div>
+ <div class="fend"><div class="soc"><a href="#" aria-label="Instagram">${ic('ig')}</a><a href="#" aria-label="Facebook">${ic('fb')}</a><a href="#" aria-label="TikTok">${ic('tt')}</a></div><img class="flogo" src="assets/logo.png" alt="Touli Store"><div>© 2023–${new Date().getFullYear()} Touli Store. Made with care. Made personal. · <a href="#" onclick="openAdmin();return false" style="color:#9aa3b5">Store editor</a></div></div>`;
+}
+function setLang(l){lang=l;if($('aiFab')){$('aiFab').querySelector('span').textContent=A('fab');$('aiBox').dataset.l=''}localStorage.setItem('toulilang',l);$('langmenu').classList.remove('open');renderChrome();route()}
+document.addEventListener('click',e=>{if(!e.target.closest('.lang'))$('langmenu').classList.remove('open')});
+function toast(s){let e=$('toast');e.textContent=s;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),2400)}
+function doSearch(e){e.preventDefault();let q=$('sq').value.trim(),c=$('scat').value;location.hash='#/shop?'+(c?'cat='+encodeURIComponent(c)+'&':'')+'q='+encodeURIComponent(q)}
+
+/* ================= HELPERS ================= */
+const stars=n=>'★'.repeat(Math.round(n))+'☆'.repeat(5-Math.round(n));
+const rate=id=>{let r=reviews[id]||[];return r.length?r.reduce((a,b)=>a+b.stars,0)/r.length:0};
+function card(p){let r=reviews[p.id]||[];return `<a class="pc" href="#/product/${p.id}"><div class="im"><span class="tag">${p.cat}</span><img src="${p.img}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.opacity=.15"></div><div class="in"><h3>${esc(p.name)}</h3>${r.length?`<div class="stars">${stars(rate(p.id))} <span class="small">(${r.length})</span></div>`:''}<div class="price"><small>${t('from')}</small> ${money(p.price)}</div><span class="pill">${ic('gift')} ${esc(p.bonus)}</span></div></a>`}
+const shipCost=(sub,m='std')=>m==='exp'?STORE.exp:0; // free standard shipping, USA only
+function setTitle(s){document.title=s?s+' — Touli Store':'Touli Store — Make it personal'}
+
+/* ================= ROUTER ================= */
+function route(){
+ let h=location.hash.slice(1)||'/';let [path,qs]=h.split('?');let q=new URLSearchParams(qs||'');let parts=path.split('/').filter(Boolean);
+ let isCo=parts[0]==='checkout';document.querySelector('.header').style.display=isCo?'none':'';document.querySelector('.topline').style.display=isCo?'none':'';$('footer').style.display=isCo?'none':'';
+ let v=parts[0]||'home';
+ ({home:pgHome,shop:()=>pgShop(q),product:()=>pgProduct(+parts[1]),cart:pgCart,checkout:pgCheckout,account:pgAccount,orders:pgOrders,order:()=>pgDone(parts[1]),page:()=>pgInfo(parts[1])}[v]||pgHome)();
+ document.documentElement.style.scrollBehavior='auto';scrollTo(0,0);document.documentElement.style.scrollBehavior='';
+}
+addEventListener('hashchange',route);
+/* clicking any menu/footer link always goes to the top, even if you are already on that page (e.g. Bags) */
+document.addEventListener('click',e=>{let a=e.target.closest('a[href^="#/"]');if(!a)return;
+ if(a.getAttribute('href')==='#'+location.hash.slice(1)){e.preventDefault();route()}});
+
+/* ================= HOME ================= */
+function pgHome(){setTitle('');
+ let tile=(c,idx)=>{let ps=products.filter(p=>p.cat===c).concat(products).slice(0,4);return `<a class="catcard" href="#/shop?cat=${c}"><h3>${c}</h3><div class="imgs">${ps.map(p=>`<img src="${p.img}" alt="" onerror="this.style.opacity=.15">`).join('')}</div><span>Shop ${c} ›</span></a>`};
+ $('app').innerHTML=`<section class="hero"><div class="hero-in"><div><div class="eyebrow">YOUR IDEAS. YOUR STYLE. YOUR STORE.</div><h1>Make every gift <span>personal.</span></h1><p>Custom creations for the moments, people and brands that matter. Pick a product, choose your style, add your photo and name — and see it before you order.</p><a class="btn" href="#/shop">Explore the collection →</a></div><div class="hero-art"><img src="assets/mug.jpg" alt=""><img src="assets/canvas.jpg" alt=""><img src="assets/tumbler.jpg" alt=""></div></div></section>
+ <div class="wrap"><div class="cats">${['Drinkware','Apparel','Prints','Accessories'].map(tile).join('')}</div>
+ <div class="trust"><div>${ic('spark')}Made personal</div><div>${ic('truck')}${t('freeUS')}</div><div>${ic('lock')}Secure checkout</div><div>${ic('heart')}Thoughtful gifts</div></div>
+ <div class="sechead"><h2>Best gifts to personalize</h2><a href="#/shop">${t('viewAll')} ›</a></div><div class="grid">${products.slice(0,8).map(card).join('')}</div>
+ <div class="sechead"><h2>Birthday & party favorites</h2><a href="#/shop">${t('viewAll')} ›</a></div><div class="grid">${products.filter(p=>[5,6,7,8].includes(p.id)).map(card).join('')}</div>
+ <div class="sechead"><h2>New: caps, jerseys, jackets & more</h2><a href="#/shop">${t('viewAll')} ›</a></div><div class="grid">${products.filter(p=>p.id>=9).map(card).join('')}</div></div>`}
+
+/* ================= SHOP ================= */
+function pgShop(q){let cat=q.get('cat')||'',term=(q.get('q')||'').toLowerCase(),sort=q.get('sort')||'';setTitle(cat||'Shop');
+ let list=products.filter(p=>(!cat||p.cat===cat)&&(!term||(p.name+p.desc+p.cat).toLowerCase().includes(term)));
+ if(sort==='lo')list.sort((a,b)=>a.price-b.price);if(sort==='hi')list.sort((a,b)=>b.price-a.price);
+ let base=t=>'#/shop?'+(t?t:'');
+ $('app').innerHTML=`<div class="wrap"><div class="crumbs"><a href="#/">${t('home')}</a> › ${cat||t('shop')}${term?` › “${esc(term)}”`:''}</div><div class="shop"><aside class="side"><h4>Category</h4><a href="#/shop" class="${!cat?'on':''}">${t('allGifts')}</a>${CATS.map(c=>`<a href="#/shop?cat=${c}" class="${c===cat?'on':''}">${c}</a>`).join('')}</aside>
+ <div><div class="toolbar"><b>${list.length} ${t('results')}</b><label>${t('sort')} <select onchange="sortBy(this.value)"><option value="">${t('feat')}</option><option value="lo" ${sort==='lo'?'selected':''}>${t('lo')}</option><option value="hi" ${sort==='hi'?'selected':''}>${t('hi')}</option></select></label></div>
+ ${list.length?`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(210px,1fr))">${list.map(card).join('')}</div>`:`<div class="card empty">${ic('search')}<h3>No results</h3><a class="btn" href="#/shop">${t('allGifts')}</a></div>`}</div></div></div>`}
+function sortBy(v){let h=location.hash.split('?');let q=new URLSearchParams(h[1]||'');v?q.set('sort',v):q.delete('sort');location.hash=h[0]+'?'+q}
+
+/* ================= PRODUCT ================= */
+function pgProduct(id){let p=products.find(x=>x.id===id);if(!p)return pgHome();setTitle(p.name);
+ draft={id,color:p.colors[0]||'',size:p.sizes?0:-1,model:p.models?modelsFor('iphone',p)[0][0]:'',brand:'iphone',text:'',photo:'',qty:1,tab:'preview'};
+ let rv=reviews[id]||[],avg=rate(id);
+ let similar=products.filter(x=>x.id!==id).sort((a,b)=>(b.cat===p.cat)-(a.cat===p.cat)).slice(0,4);
+ $('app').innerHTML=`<div class="wrap"><div class="crumbs"><a href="#/">${t('home')}</a> › <a href="#/shop?cat=${p.cat}">${p.cat}</a> › ${esc(p.name)}</div>
+ <div class="pp"><div class="gal"><div id="gview"></div><div class="thumbs" id="thumbs"></div></div>
+ <div class="pi"><h1>${esc(p.name)}</h1><div class="ratingrow">${rv.length?`<span class="stars">${stars(avg)}</span> <a href="#rev">${rv.length} ${t('reviews').toLowerCase()}</a>`:`<span class="muted">${t('noRev').split('.')[0]}.</span>`}</div>
+ <div class="big" id="pprice"></div><p class="muted">${esc(p.desc)}</p><span class="pill">${ic('gift')} ${t('bonusL')}: ${esc(p.bonus)}</span>
+ ${p.colors.length?`<div class="opt"><label>${p.colorLabel||t('color')}: <span id="clbl"></span></label><div class="sw">${p.colors.map(c=>`<button type="button" title="${CL[c][0]}" style="background:${CL[c][1]}" data-c="${c}" onclick="pick('color','${c}')"></button>`).join('')}</div></div>`:''}
+ ${p.models?`<div class="opt"><label>${t('model')}</label><div class="chips brand"><button type="button" data-b="iphone" onclick="setBrand('iphone')">iPhone</button><button type="button" data-b="android" onclick="setBrand('android')">Android</button></div><select class="field" id="msel" style="margin-top:10px" onchange="draft.model=this.value;drawPrev()"></select></div>`:''}
+ ${p.sizes?`<div class="opt"><label>${t('size')}</label><div class="chips">${p.sizes.map((s,i)=>`<button type="button" data-s="${i}" onclick="pick('size',${i})">${s[0]}${s[1]?` <span class="small">+${money(s[1])}</span>`:''}</button>`).join('')}</div></div>`:''}
+ <div class="opt"><label>${t('yourText')} <span>(optional)</span></label><textarea class="field" maxlength="80" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();addDraft()}" oninput="draft.text=this.value;drawPrev()" placeholder="e.g. Happy Birthday Vanessa 🎉"></textarea></div>
+ <div class="opt"><label>${t('yourPhoto')} <span>(optional)</span></label><input class="field" type="file" accept="image/*" onchange="onPhoto(this)"></div>
+ <div class="buybox"><div class="price" id="bprice"></div><p class="green">${ic('truck')} ${t('freeUS')}</p><p class="small">Final design is confirmed with you before printing.</p>
+ <div class="row"><span class="qtysel"><button onclick="dq(-1)">−</button><span id="dq">1</span><button onclick="dq(1)">+</button></span></div>
+ <button class="btn block" onclick="addDraft()">${ic('cart')} ${t('addCart')}</button><button class="btn dark block" style="margin-top:8px" onclick="addDraft(true)">${t('buyNow')}</button><div class="secure">${ic('lock')} ${t('secure')}</div></div></div></div>
+ <div class="card tabs-sec"><h3>${t('desc')}</h3><ul class="det">${p.det.map(d=>`<li>${esc(d)}</li>`).join('')}</ul></div>
+ <div class="card tabs-sec" id="rev"><h3>${t('reviews')}</h3><div class="reviews"><div><div class="big" style="font-size:40px;font-weight:800">${rv.length?avg.toFixed(1):'–'}</div><div class="stars">${rv.length?stars(avg):''}</div><p class="small">${rv.length} reviews</p><button class="btn ghost" onclick="reviewForm(${id})">${t('writeRev')}</button></div><div id="revlist">${rv.length?rv.map(r=>`<div class="rev"><div class="stars">${stars(r.stars)}</div><b>${esc(r.name)}</b> <span class="small">· verified account</span><p>${esc(r.text)}</p></div>`).join(''):`<p class="muted">${t('noRev')}</p>`}</div></div></div>
+ <div class="sechead"><h2>${t('similar')}</h2></div><div class="grid">${similar.map(card).join('')}</div></div>`;
+ pick('color',draft.color,1);pick('size',draft.size,1);if(p.models)setBrand('iphone');else gtab('preview');upd()}
+function pick(k,v,silent){draft[k]=v;let p=products.find(x=>x.id===draft.id);
+ document.querySelectorAll('[data-c]').forEach(b=>b.classList.toggle('on',b.dataset.c===draft.color));
+ document.querySelectorAll('[data-s]').forEach(b=>b.classList.toggle('on',+b.dataset.s===draft.size));
+ let l=$('clbl');if(l&&draft.color)l.textContent=CL[draft.color][0];upd();drawPrev()}
+function unit(){let p=products.find(x=>x.id===draft.id);return p.price+(p.sizes&&draft.size>=0?p.sizes[draft.size][1]:0)}
+function upd(){let u=unit();$('pprice')&&($('pprice').textContent=money(u));$('bprice')&&($('bprice').textContent=money(u*draft.qty));$('dq')&&($('dq').textContent=draft.qty)}
+function dq(d){draft.qty=Math.max(1,Math.min(50,draft.qty+d));upd()}
+
+const MODELS={iphone:[['iPhone 12','diag'],['iPhone 13','diag'],['iPhone 14','diag'],['iPhone 15','diag'],['iPhone 16','vert'],['iPhone 17','bar'],['iPhone 17e','one'],['iPhone Air','air'],['iPhone 17 Pro','tri'],['iPhone 18 Pro','tri'],['iPhone 18 Pro Max','tri'],['iPhone Duo (2026)','bar']],
+android:[['Samsung Galaxy S23','sam'],['Samsung Galaxy S24','sam'],['Samsung Galaxy S25','sam'],['Samsung Galaxy S26','sam'],['Samsung Galaxy S26 Ultra','sam'],['Samsung Galaxy Z Fold8','sam'],['Google Pixel 8','visor'],['Google Pixel 9','visor'],['Google Pixel 10','visor'],['Google Pixel 11','visor']]};
+const modelsFor=(b,p)=>{p=p||products.find(x=>x.id===draft.id);return p&&p.foldOnly?MODELS[b].filter(m=>p.foldOnly.includes(m[0])):MODELS[b]};
+const camOf=m=>{for(let b in MODELS){let r=MODELS[b].find(x=>x[0]===m);if(r)return r[1]}return'diag'};
+const DK=['black','navy','purple','red','blue','teal'];
+const lens=(x,y,r=9)=>`<circle cx="${x}" cy="${y}" r="${r+3}" fill="#0c0f16"/><circle cx="${x}" cy="${y}" r="${r}" fill="#1d2433" stroke="#46526f" stroke-width="2"/><circle cx="${x-r/3}" cy="${y-r/3}" r="${r/4}" fill="#7d8db3"/>`;
+function camSVG(k){const bp=(w,h)=>`<rect x="36" y="30" width="${w}" height="${h}" rx="16" fill="#0000004d" stroke="#0003"/>`;
+ return{diag:bp(56,56)+lens(54,48)+lens(78,72),tri:bp(62,62)+lens(54,46)+lens(54,76)+lens(84,61),vert:bp(34,64)+lens(53,48,10)+lens(53,76,10),bar:`<rect x="34" y="32" width="132" height="42" rx="14" fill="#0000004d"/>${lens(62,53,11)}${lens(96,53,11)}`,one:bp(40,40)+lens(56,50,11),air:`<rect x="34" y="32" width="132" height="40" rx="14" fill="#0000004d"/>${lens(64,52,11)}`,sam:lens(56,48,8)+lens(56,76,8)+lens(56,104,8),visor:`<rect x="30" y="64" width="140" height="34" rx="17" fill="#0000004d"/>${lens(70,81,9)}${lens(104,81,9)}`}[k]}
+function phoneSVG(view,model,c){let col=c.color?CL[c.color][1]:'#16181d',clear=c.color==='clear',fg=DK.includes(c.color)?'#fff':'#16181d',k=camOf(model),id='c'+Math.random().toString(36).slice(2,7);
+ const lab=`<text x="100" y="402" text-anchor="middle" font-size="12" font-weight="700" fill="#667" font-family="DM Sans,sans-serif">${esc(model)}</text>`;
+ if(view==='side')return`<svg class="psvg" viewBox="0 0 200 410"><rect x="82" y="20" width="36" height="360" rx="14" fill="${clear?'#dfe9ee':col}" stroke="#0003"/><rect x="68" y="32" width="16" height="${k==='visor'?30:56}" rx="6" fill="#0004"/><rect x="118" y="96" width="5" height="36" rx="2" fill="#0005"/><rect x="118" y="146" width="5" height="36" rx="2" fill="#0005"/><rect x="118" y="212" width="5" height="54" rx="2" fill="#0005"/>${lab}</svg>`;
+ if(view==='front')return`<svg class="psvg" viewBox="0 0 200 410"><defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9a3c"/><stop offset="1" stop-color="#7a3cff"/></linearGradient></defs><rect x="30" y="16" width="140" height="368" rx="30" fill="${clear?'#dfe9ee':col}" stroke="#0003" stroke-width="2"/><rect x="38" y="24" width="124" height="352" rx="23" fill="url(#${id})"/>${c.photo?`<image href="${c.photo}" x="38" y="24" width="124" height="352" preserveAspectRatio="xMidYMid slice"/>`:''}<rect x="86" y="34" width="28" height="9" rx="4.5" fill="#000"/><text x="100" y="120" text-anchor="middle" font-size="34" font-weight="700" fill="#fff" font-family="DM Sans,sans-serif">9:41</text>${lab}</svg>`;
+ let sz=Math.max(13,28-(c.text||'').length*.4);
+ return`<svg class="psvg" viewBox="0 0 200 410"><defs><clipPath id="${id}"><rect x="30" y="16" width="140" height="368" rx="30"/></clipPath></defs><g clip-path="url(#${id})"><rect x="30" y="16" width="140" height="368" fill="${clear?'#e8eef2':col}"/>${c.photo?`<image href="${c.photo}" x="30" y="16" width="140" height="368" preserveAspectRatio="xMidYMid slice"/>`:`<rect x="46" y="120" width="108" height="190" rx="12" fill="#ffffff33" stroke="${fg}" stroke-opacity=".5" stroke-dasharray="5 4"/><text x="100" y="220" text-anchor="middle" font-size="11" fill="${fg}" font-family="DM Sans,sans-serif">${esc(t('yourPhoto'))}</text>`}${c.text?`<text x="100" y="352" text-anchor="middle" font-size="${sz}" fill="${c.photo?'#fff':fg}" stroke="${c.photo?'#0006':'none'}" stroke-width=".6" font-family="Dancing Script,cursive">${esc(c.text)}</text>`:''}${camSVG(k)}</g><rect x="30" y="16" width="140" height="368" rx="30" fill="none" stroke="#0003" stroke-width="3"/>${lab}</svg>`}
+function genSVG(p,v,c){let col=c.color?CL[c.color][1]:'#e9e2d6',fg=DK.includes(c.color)?'#fff':'#16181d';
+ const ph=(x,y,w,h)=>c.photo?`<image href="${c.photo}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid slice"/>`:`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="#ffffff44" stroke="${fg}" stroke-opacity=".45" stroke-dasharray="4 3"/>`;
+ const W=b=>`<svg class="psvg" viewBox="0 0 200 220">${b}</svg>`;
+ if(p.id===1)return v==='top'?W(`<circle cx="100" cy="110" r="72" fill="#222"/><circle cx="100" cy="110" r="58" fill="#111"/><circle cx="118" cy="96" r="6" fill="#9aa"/>`):W(`<rect x="62" y="24" width="76" height="14" rx="6" fill="#222"/><rect x="104" y="2" width="6" height="24" rx="3" fill="#9aa"/><path d="M64 38H136L128 200Q127 208 119 208H81Q73 208 72 200Z" fill="${col}" stroke="#0002"/>${ph(78,70,44,90)}`);
+ if(p.id===4)return v==='top'?W(`<circle cx="100" cy="110" r="70" fill="${col}" stroke="#0002"/><circle cx="100" cy="110" r="56" fill="#5b3a29"/><path d="M168 96q28 0 28 20" fill="none" stroke="${col}" stroke-width="12"/>`):W(`<rect x="40" y="56" width="96" height="108" rx="12" fill="${col}" stroke="#0002"/><path d="M134 80q42 0 42 32q0 32-42 32" fill="none" stroke="${col}" stroke-width="14"/>${ph(52,76,72,66)}`);
+ if(p.id===5)return W(`<path d="M70 70Q70 20 100 20Q130 20 130 70" fill="none" stroke="${col}" stroke-width="8"/><rect x="35" y="70" width="130" height="136" rx="6" fill="${col}" stroke="#0002"/>`);
+ if(p.id===6||p.id===7)return W(`<path d="M62 30L18 62L38 100L58 90V196H142V90L162 100L182 62L138 30Q100 52 62 30Z" fill="${col}" stroke="#0002"/>`);
+ if(p.id===2)return W(`<rect x="56" y="30" width="28" height="160" fill="#c9a77a" stroke="#0002"/><polygon points="84,30 162,44 162,176 84,190" fill="#f4efe8" stroke="#0002"/><text x="123" y="116" text-anchor="middle" font-size="9" fill="#667" font-family="DM Sans,sans-serif">1.5″</text>`);
+ return W(`<rect x="20" y="50" width="160" height="120" fill="${col}" stroke="#0002"/>${ph(40,70,120,80)}`+[[26,56],[174,56],[26,164],[174,164]].map(q=>`<circle cx="${q[0]}" cy="${q[1]}" r="5" fill="#9aa" stroke="#667"/>`).join(''))}
+const ANG=p=>p.models?['back','front','side']:({1:['side','top'],4:['side','top'],5:['back'],6:['back'],7:['back'],2:['side'],8:['detail']}[p.id]||[]);
+const vlabel=k=>t(({preview:'vPrev',photo:'vPhoto',back:'vBack',front:'vFront',side:'vSide',top:'vTop',detail:'vDetail'})[k]);
+function setBrand(b){draft.brand=b;draft.model=modelsFor(b)[0][0];document.querySelectorAll('[data-b]').forEach(x=>x.classList.toggle('on',x.dataset.b===b));$('msel').innerHTML=modelsFor(b).map(m=>`<option>${m[0]}</option>`).join('');gtab(draft.tab||'preview')}
+function gtab(x){draft.tab=x;let p=products.find(q=>q.id===draft.id),g=$('gview');if(!g)return;
+ if(x==='photo')g.innerHTML=`<div class="gmain"><img src="${p.img}" alt="${esc(p.name)}"></div>`;
+ else if(x==='preview'&&!p.models){g.innerHTML='<div class="prev" id="prev"></div>';drawShape()}
+ else g.innerHTML=`<div class="prev"><span class="vlbl">${vlabel(x)}</span>${p.models?phoneSVG(x==='preview'?'back':x,draft.model,draft):genSVG(p,x,draft)}</div>`;
+ let keys=['preview','photo',...ANG(p)];$('thumbs').innerHTML=keys.map(k=>`<button type="button" class="${k===x?'on':''}" aria-label="${vlabel(k)}" title="${vlabel(k)}" onclick="gtab('${k}')">${k==='photo'?`<img src="${p.img}" alt="">`:k==='preview'?(p.models?phoneSVG('back',draft.model,draft):`<span style="width:70%;height:70%;border-radius:10px;background:${draft.color?CL[draft.color][1]:'#ece6dd'}"></span>`):p.models?phoneSVG(k,draft.model,draft):genSVG(p,k,draft)}</button>`).join('')}
+function drawPrev(){gtab(draft.tab||'preview')}
+function drawShape(){let el=$('prev');if(!el)return;let p=products.find(x=>x.id===draft.id);let bg=draft.color?CL[draft.color][1]:'#ece6dd';
+ let fg=draft.color?(DK.includes(draft.color)?'#fff':'#16181d'):'#333';el.style.background='#f3f0ec';
+ el.innerHTML=`<div class="shape ${p.shape}" style="background:${bg};color:${fg}"><div class="ph ${draft.photo?'has':''}" style="${draft.photo?`background-image:url(${draft.photo})`:`color:${fg};border-color:${fg}55`}">${draft.photo?'':t('yourPhoto')}</div>${draft.text?`<div class="tx">${esc(draft.text)}</div>`:''}</div><div class="note">${esc(p.name)}${draft.color?' · '+CL[draft.color][0]:''}</div>`}
+function onPhoto(inp){let f=inp.files[0];if(!f)return;if(f.size>15e6)return toast('Photo too large (max 15 MB)');let r=new FileReader();r.onload=()=>{let im=new Image();im.onload=()=>{let s=Math.min(1,700/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);draft.photo=c.toDataURL('image/jpeg',.82);gtab('preview')};im.src=r.result};r.readAsDataURL(f)}
+function addDraft(buy){let p=products.find(x=>x.id===draft.id);let o={key:Date.now()+''+Math.random(),id:p.id,name:p.name,img:p.img,price:unit(),qty:draft.qty,color:draft.color,size:draft.size>=0?p.sizes[draft.size][0]:'',model:draft.model,text:draft.text,photo:draft.photo?'yes':'',thumb:draft.photo?thumbOf(draft.photo):''};
+ cart.push(o);save('touliCart',cart);$('cn').textContent=count();toast('Added to your cart ✓');if(buy)location.hash='#/cart'}
+function thumbOf(d){return d}   // already downscaled to 700px
+function reviewForm(id){if(!user){toast('Please sign in to write a review');return location.hash='#/account?next=product/'+id}
+ let txt=prompt('Your review:');if(!txt)return;let s=+prompt('Rating 1–5:','5');if(!(s>=1&&s<=5))return;(reviews[id]=reviews[id]||[]).push({name:user.name,stars:s,text:txt.slice(0,600)});save('touliReviews',reviews);pgProduct(id)}
+
+/* ================= CART ================= */
+function lineOpts(x){return [x.color&&CL[x.color]?'Color: '+CL[x.color][0]:'',x.size?'Size: '+x.size:'',x.model?'Model: '+x.model:'',x.text?'Text: “'+esc(x.text)+'”':'',x.photo?'Photo attached':''].filter(Boolean).join(' · ')}
+function pgCart(){setTitle(t('cart'));let sub=total();
+ if(!cart.length){$('app').innerHTML=`<div class="wrap"><div class="card empty">${ic('cart')}<h2>${t('empty')}</h2><a class="btn" href="#/shop">${t('keep')}</a></div></div>`;return}
+ 
+ $('app').innerHTML=`<div class="wrap"><h1>${t('cart')}</h1><div class="cartpg"><div class="card">${cart.map((x,i)=>`<div class="cl"><img src="${x.thumb||x.img}" alt=""><div><h4><a href="#/product/${x.id}" style="text-decoration:none">${esc(x.name)}</a></h4><div class="opts">${lineOpts(x)}</div><div class="acts"><span class="qtysel"><button onclick="cq(${i},-1)">−</button><span>${x.qty}</span><button onclick="cq(${i},1)">+</button></span><a onclick="rm(${i})">${t('remove')}</a></div></div><div class="pr price">${money(x.price*x.qty)}</div></div>`).join('')}<div style="text-align:right;padding-top:14px" class="price"><small>${t('sub')} (${count()}):</small> ${money(sub)}</div></div>
+ <div class="card sum"><p class="green" style="margin-top:0">✓ ${t('freeUS')}</p>
+ <div class="r"><span>${t('sub')}</span><b>${money(sub)}</b></div><div class="r"><span>${t('ship')}</span><b>${shipCost(sub)?money(shipCost(sub)):t('free')}</b></div><div class="r t"><span>${t('total')}</span><span>${money(sub+shipCost(sub))}</span></div>
+ <a class="btn block" style="margin-top:14px" href="#/checkout">${t('checkout')}</a><div class="secure">${ic('lock')} ${t('secure')}</div></div></div></div>`}
+function cq(i,d){cart[i].qty+=d;if(cart[i].qty<1)cart.splice(i,1);save('touliCart',cart);$('cn').textContent=count();pgCart()}
+function rm(i){cart.splice(i,1);save('touliCart',cart);$('cn').textContent=count();pgCart()}
+
+/* ================= AUTH ================= */
+const sha=async s=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)))].map(b=>b.toString(16).padStart(2,'0')).join('');
+function nextUrl(){let q=new URLSearchParams((location.hash.split('?')[1])||'');return q.get('next')||''}
+function pgAccount(){setTitle(t('signIn'));
+ if(user){$('app').innerHTML=`<div class="wrap"><div class="doc"><h1>Hello, ${esc(user.name)}</h1><div class="card"><p><b>${esc(user.email)}</b></p><a class="btn" href="#/orders">${t('orders')}</a> <button class="btn ghost" onclick="signOut()">${t('out')}</button></div></div></div>`;return}
+ drawAuth('in')}
+function drawAuth(mode){drawAuthBase(mode);let c=document.querySelector('.sso:not(.ap)');if(c&&GOOGLE_CLIENT_ID){c.insertAdjacentHTML('beforebegin','<div class="gsi-wrap" id="gbtn"></div>');mountG()}}
+function drawAuthBase(mode){let up=mode==='up';$('app').innerHTML=`<div class="wrap"><div class="auth card"><div style="text-align:center"><img src="assets/logo.png" style="height:44px" alt=""></div><h2 style="margin-top:14px">${up?t('create'):t('signIn')}</h2>
+ <button class="sso" onclick="sso('Google')"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.4 30.2 0 24 0 14.6 0 6.5 5.400 2.600 13.200l7.800 6.100C12.300 13.600 17.700 9.500 24 9.500z"/><path fill="#4285F4" d="M46.500 24.500c0-1.600-.1-3.100-.4-4.500H24v9h12.700c-.6 3-2.300 5.500-4.800 7.200l7.500 5.800c4.400-4.100 7.100-10.100 7.100-17.500z"/><path fill="#FBBC05" d="M10.400 28.700A14.500 14.500 0 0 1 9.500 24c0-1.600.3-3.200.9-4.700l-7.800-6.100A24 24 0 0 0 0 24c0 3.900.9 7.500 2.600 10.800l7.800-6.100z"/><path fill="#34A853" d="M24 48c6.200 0 11.500-2 15.300-5.600l-7.500-5.800c-2 1.400-4.700 2.300-7.800 2.300-6.300 0-11.700-4.100-13.600-9.800l-7.800 6.100C6.500 42.600 14.600 48 24 48z"/></svg>${t('google')}</button>
+ <button class="sso ap" onclick="sso('Apple')"><svg width="16" height="18" viewBox="0 0 384 512" fill="#fff"><path d="M318.700 268.700c-.2-36.700 16.400-64.400 50-84.800-18.800-26.900-47.200-41.700-84.700-44.600-35.500-2.800-74.300 20.700-88.500 20.700-15 0-49.400-19.700-76.400-19.700C63.300 141.200 4 184.800 4 273.500q0 39.300 14.400 81.200c12.800 36.700 59 126.700 107.200 125.200 25.200-.6 43-17.900 75.800-17.900 31.800 0 48.300 17.900 76.400 17.900 48.600-.7 90.400-82.500 102.600-119.300-65.200-30.700-61.700-90-61.700-91.900zm-56.600-164.200c27.300-32.400 24.800-61.900 24-72.500-24.100 1.400-52 16.400-67.900 34.900-17.500 19.800-27.800 44.300-25.600 71.900 26.100 2 49.900-11.400 69.500-34.300z"/></svg>${t('apple')}</button>
+ <div class="sep">${t('or')}</div><form onsubmit="return authSubmit(event,${up})">${up?`<input class="field" id="an" placeholder="${t('name')}" required autocomplete="name">`:''}<input class="field" id="ae" type="email" placeholder="${t('email')}" required autocomplete="email"><input class="field" id="ap" type="password" placeholder="${t('pw')}${up?' (min 8)':''}" required minlength="${up?8:1}" autocomplete="${up?'new-password':'current-password'}"><div class="err" id="aerr"></div><button class="btn block">${up?t('create'):t('signIn')}</button></form>
+ <p class="small" style="text-align:center;margin-top:14px">${up?`Already have an account? <a href="#" onclick="drawAuth('in');return false">${t('signIn')}</a>`:`New to Touli Store? <a href="#" onclick="drawAuth('up');return false">${t('create')}</a>`}</p><p class="small" style="text-align:center"><a href="#/">You can browse and add to cart without an account →</a></p></div></div>`}
+async function authSubmit(e,up){e.preventDefault();let em=$('ae').value.trim().toLowerCase(),pw=$('ap').value,users=load('touliUsers',{});
+ if(up){if(users[em])return $('aerr').textContent='An account with this email already exists.';users[em]={name:$('an').value.trim(),hash:await sha(pw)};save('touliUsers',users);login(em,users[em].name)}
+ else{let u=users[em];if(!u||u.hash!==await sha(pw))return $('aerr').textContent='Incorrect email or password.';login(em,u.name)}return false}
+function sso(provider){ if(provider==='Google'&&GOOGLE_CLIENT_ID){oneTap();return}
+ // Demo flow. Real Google/Apple sign-in needs the client IDs above + a backend to verify tokens.
+ let em=prompt(provider+' sign-in (demo) — enter your email:');if(!em||!/^\S+@\S+\.\S+$/.test(em))return;login(em.toLowerCase(),em.split('@')[0])}
+
+/* ---- Google sign-in (One Tap + official button). Paste GOOGLE_CLIENT_ID at the top. ---- */
+let gReady=false;
+function loadGoogle(cb){if(!GOOGLE_CLIENT_ID)return;if(window.google&&google.accounts){cb&&cb();return}
+ let sc=document.createElement('script');sc.src='https://accounts.google.com/gsi/client';sc.async=true;sc.onload=()=>cb&&cb();document.head.appendChild(sc)}
+function gInit(){if(gReady)return;google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:gCred,auto_select:true,cancel_on_tap_outside:true});gReady=true}
+function gCred(r){try{let p=JSON.parse(decodeURIComponent(escape(atob(r.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')))));
+ /* verify r.credential on your server before trusting it for real accounts */
+ login(p.email.toLowerCase(),p.name||p.email.split('@')[0])}catch(e){toast('Google sign-in failed')}}
+function oneTap(){if(!GOOGLE_CLIENT_ID||user)return;loadGoogle(()=>{gInit();google.accounts.id.prompt()})}
+function mountG(){loadGoogle(()=>{gInit();let h=document.getElementById('gbtn');if(!h)return;
+ google.accounts.id.renderButton(h,{theme:'outline',size:'large',shape:'pill',width:300,text:'continue_with'});
+ let c=document.querySelector('.sso:not(.ap)');if(c)c.style.display='none'})}
+function login(email,name){user={email,name};save('touliUser',user);renderChrome();toast('Signed in ✓');let n=nextUrl();location.hash=n?'#/'+n:'#/'}
+function signOut(){user=null;localStorage.removeItem('touliUser');renderChrome();location.hash='#/'}
+
+/* ================= CHECKOUT ================= */
+let co={step:1,addr:load('touliAddr',{}),ship:'std'};
+function pgCheckout(){setTitle('Checkout');
+ if(!cart.length){location.hash='#/cart';return}
+ if(!user){location.hash='#/account?next=checkout';return}
+ coRender()}
+function coRender(){let sub=total(),sc=shipCost(sub,co.ship),a=co.addr;
+ let st=(n,title,summary,body)=>`<div class="step ${co.step<n?'lock':''}"><div class="sh"><span><span class="num">${n}</span>${title}</span>${co.step>n?`<span style="font-weight:400;font-size:13px;text-align:right">${summary}</span><a style="font-size:12px;color:#0a6ab5;cursor:pointer" onclick="co.step=${n};coRender()">Change</a>`:''}</div>${co.step===n?`<div class="sb">${body}</div>`:''}</div>`;
+ $('app').innerHTML=`<div class="cochead"><div><a href="#/"><img src="assets/logo.png" style="height:38px" alt=""></a><b>Checkout (${count()})</b><span class="green">${ic('lock')}</span></div></div><div class="wrap" style="max-width:1000px"><div class="cogrid"><div>
+ ${st(1,t('stepA'),esc((a.n||'')+', '+(a.a||'')+', '+(a.c||'')),`<form id="af" onsubmit="return coAddr(event)"><label class="fl">${t('name')}<input class="field" name="n" required autocomplete="name" value="${esc(a.n||user.name)}"></label><div class="two"><label class="fl">${t('email')}<input class="field" name="e" type="email" required autocomplete="email" value="${esc(a.e||user.email)}"></label><label class="fl">Phone<input class="field" name="p" type="tel" required autocomplete="tel" value="${esc(a.p||'')}"></label></div><label class="fl">Street address<input class="field" name="a" required autocomplete="street-address" value="${esc(a.a||'')}"></label><div class="two"><label class="fl">City<input class="field" name="c" required value="${esc(a.c||'')}"></label><label class="fl">State / Province<input class="field" name="s" value="${esc(a.s||'')}"></label></div><div class="two"><label class="fl">ZIP / postal code<input class="field" name="z" required value="${esc(a.z||'')}"></label><label class="fl">Country<input class="field" name="k" required autocomplete="country-name" value="${esc(a.k||'United States')}"></label></div><p class="small">${t('usNote')}</p><button class="btn">Use this address</button></form>`)}
+ ${st(2,t('stepD'),co.ship==='exp'?t('expd'):t('stdd'),`<div class="radio ${co.ship==='std'?'on':''}" onclick="co.ship='std';coRender()"><input type="radio" ${co.ship==='std'?'checked':''}><div><b>${t('stdd')} — ${shipCost(sub)?money(STORE.std):t('free')}</b><span class="small">Estimated 5–10 business days after design approval</span></div></div><div class="radio ${co.ship==='exp'?'on':''}" onclick="co.ship='exp';coRender()"><input type="radio" ${co.ship==='exp'?'checked':''}><div><b>${t('expd')} — ${money(STORE.exp)}</b><span class="small">Estimated 2–4 business days after design approval</span></div></div><button class="btn" onclick="co.step=3;coRender()">Continue</button>`)}
+ ${st(3,t('stepP'),'',`<div id="pay"></div><div class="secure">${ic('lock')} ${t('secure')}</div>`)}
+ </div><div class="card sum" style="position:sticky;top:14px"><h3>Order summary</h3>${cart.map(x=>`<div class="r" style="font-size:12px"><span>${esc(x.name)} × ${x.qty}</span><span>${money(x.price*x.qty)}</span></div>`).join('')}<div class="r" style="border-top:1px solid var(--line);margin-top:8px"><span>${t('sub')}</span><b>${money(sub)}</b></div><div class="r"><span>${t('ship')}</span><b>${sc?money(sc):t('free')}</b></div><div class="r t"><span>${t('total')}</span><span>${money(sub+sc)}</span></div></div></div></div>`;
+ if(co.step===3)initPay()}
+function coAddr(e){e.preventDefault();co.addr=Object.fromEntries(new FormData($('af')));save('touliAddr',co.addr);co.step=2;coRender();return false}
+function finishOrder(method){let sub=total(),sc=shipCost(sub,co.ship);let o={id:'TS'+Date.now().toString().slice(-8),date:new Date().toISOString(),items:cart.map(x=>({...x,thumb:''})),sub,ship:sc,total:sub+sc,addr:co.addr,method,email:user.email};orders.unshift(o);save('touliOrders',orders);cart=[];save('touliCart',cart);co.step=1;$('cn').textContent=0;location.hash='#/order/'+o.id}
+function initPay(){const P=$('pay');if(!P)return;
+ if(!PAYPAL_CLIENT_ID){P.innerHTML=`<button class="btn block" onclick="finishOrder('test')">${t('placed')} (test mode)</button><p class="small">Test mode: no payment is taken. Add your PayPal client ID in the CONFIG section to accept cards and PayPal. Card numbers are entered inside PayPal's secure fields, never on this page.</p>`;return}
+ const go=()=>paypal.Buttons({style:{layout:'vertical',shape:'pill'},createOrder:(d,a)=>a.order.create({purchase_units:[{description:'Touli Store order',amount:{currency_code:'USD',value:(total()+shipCost(total(),co.ship)).toFixed(2)},shipping:{name:{full_name:co.addr.n},address:{address_line_1:co.addr.a,admin_area_2:co.addr.c,admin_area_1:co.addr.s||'',postal_code:co.addr.z,country_code:(co.addr.k||'US').slice(0,2).toUpperCase()}}}]}),onApprove:(d,a)=>a.order.capture().then(()=>finishOrder('paypal')),onError:()=>toast('Payment failed. Please try again.')}).render('#pay');
+ if(window.paypal)go();else{let s=document.createElement('script');s.src='https://www.paypal.com/sdk/js?client-id='+PAYPAL_CLIENT_ID+'&currency=USD&enable-funding=card';s.onload=go;document.head.appendChild(s)}}
+function pgDone(id){setTitle('Order confirmed');let o=orders.find(x=>x.id===id);if(!o)return pgOrders();
+ $('app').innerHTML=`<div class="wrap"><div class="doc card" style="text-align:center"><div class="ok">${ic('check')}</div><h1>${t('thanks')}</h1><p>Order <b>${o.id}</b> · A confirmation will be sent to <b>${esc(o.email)}</b>. We will contact you to approve your design before printing.</p><p class="price">${money(o.total)}</p><a class="btn" href="#/orders">${t('orders')}</a> <a class="btn ghost" href="#/shop">${t('keep')}</a></div></div>`}
+function pgOrders(){setTitle(t('orders'));if(!user){location.hash='#/account?next=orders';return}
+ let mine=orders.filter(o=>o.email===user.email);
+ $('app').innerHTML=`<div class="wrap"><div class="doc"><h1>${t('orders')}</h1>${mine.length?mine.map(o=>`<div class="card" style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><div><b>${o.id}</b><div class="small">${new Date(o.date).toLocaleDateString()}</div></div><div class="price">${money(o.total)}</div></div>${o.items.map(x=>`<div style="padding:8px 0;border-top:1px solid var(--line);font-size:13px"><b>${esc(x.name)}</b> × ${x.qty}<div class="small">${lineOpts(x)}</div></div>`).join('')}<div class="pill" style="margin-top:8px">Status: Received — awaiting design approval</div></div>`).join(''):`<div class="card empty">${ic('box')}<h3>No orders yet</h3><a class="btn" href="#/shop">${t('keep')}</a></div>`}</div></div>`}
+
+/* ================= INFO PAGES ================= */
+const PAGES={
+about:['About Touli Store',`<p>Touli Store is all about making everyday products feel special. From personalized cups and clothing to photo gifts, prints and custom accessories, we bring your ideas to life with a personal touch.</p><p>Founded in 2023, we keep creating new ways to celebrate people, memories and milestones.</p>`],
+shipping:['Shipping & delivery',`<p>Standard delivery is FREE for addresses in the USA. Free shipping is not available outside the USA. Express delivery is ${money(STORE.exp)}.</p><h3>Processing</h3><p>Personalized items are made to order. After you place an order we contact you to approve your design, then production begins.</p><h3>Delivery times</h3><p>Standard: 5–10 business days. Express: 2–4 business days, counted after design approval.</p>`],
+returns:['Returns & refunds',`<p>Because each item is made just for you, personalized products cannot be returned unless they arrive damaged or with a mistake on our side. Contact us within 7 days of delivery with a photo and your order number and we will reprint or refund.</p>`],
+custom:['Custom orders',`<p>Need something not listed — bulk gifts, wedding favors, business branding? Send us your idea, photo or artwork and we will confirm details and price before production.</p><a class="crow" href="mailto:${STORE.email}">${ic('mail')}<span>${STORE.email}</span></a><a class="crow" href="tel:${STORE.tel}">${ic('tel')}<span>${STORE.phone}</span></a>`],
+contact:['Contact us',`<p>We are happy to help. Pick what you need below, or talk to our assistant for instant answers.</p>
+<div class="chelp"><a href="#/orders">${ic('box')}<span>Track my order</span></a><a href="#/page/shipping">${ic('truck')}<span>Shipping &amp; delivery</span></a><a href="#/page/returns">${ic('check')}<span>Returns &amp; refunds</span></a><a href="#/page/custom">${ic('pen')}<span>Custom &amp; bulk orders</span></a><a href="#" onclick="aiOpen();return false">${ic('spark')}<span>Ask Touli AI</span></a></div>
+<h3>Talk to a person</h3>
+<ol class="steps"><li><span>Have your <b>order number</b> ready (find it in <a href="#/orders">Your orders</a>) and the email you used.</span></li><li><span>If an item arrived damaged or wrong, take a clear <b>photo</b> and keep it for the message.</span></li><li><span>Call, email, or send the form below. We answer messages in the order they arrive.</span></li></ol>
+<a class="crow" href="tel:${STORE.tel}">${ic('tel')}<span>${STORE.phone}</span></a><a class="crow" href="mailto:${STORE.email}">${ic('mail')}<span>${STORE.email}</span></a>
+<h3 style="margin-top:26px">Send us a message</h3>
+<form class="cform" onsubmit="return cSend(event)"><input id="cfn" placeholder="Your name" required><input id="cfe" type="email" placeholder="Your email" required><select id="cft"><option>Order question</option><option>Product question</option><option>Custom / bulk order</option><option>Problem with my order</option><option>Other</option></select><input id="cfo" placeholder="Order number (optional)"><textarea id="cfm" placeholder="How can we help?" required></textarea><button class="btn">Send message</button></form>
+<p class="small">The button opens your email app with the message ready to send.</p>`],
+help:['Help Center',`<div class="faq"><details><summary>How do I personalize a product?</summary><p>Open any product, choose its color and size, type your name or message, upload a photo and watch the preview update live.</p></details><details><summary>Do I need an account to shop?</summary><p>No. Browse and add to your cart freely. You only sign in (Google, Apple or email) when you check out.</p></details><details><summary>Is my payment secure?</summary><p>Yes. Card details are entered in our payment provider's secure fields and never stored on this site.</p></details><details><summary>How long does delivery take?</summary><p>See Shipping &amp; delivery for estimates.</p></details><details><summary>Can I return a personalized item?</summary><p>See Returns &amp; refunds.</p></details></div>`],
+faq:null,
+privacy:['Privacy policy',`<p>We collect only what is needed to process your order: name, email, phone, address and the photos or text you provide for personalization. Payments are handled by our payment provider; we never see or store your full card number. We do not sell your data. Contact ${STORE.email} to request access or deletion.</p>`],
+terms:['Terms of service',`<p>By placing an order you confirm the personalization details you provide are correct and that you own the rights to any photo or artwork you upload. Prices are in USD. Final design and price are confirmed before production. Personalized items are non-returnable except as described in our Returns policy.</p>`]};
+PAGES.faq=PAGES.help;
+function pgInfo(k){let p=PAGES[k];if(!p)return pgHome();setTitle(p[0]);$('app').innerHTML=`<div class="wrap"><div class="doc card"><div class="crumbs"><a href="#/">${t('home')}</a> › ${p[0]}</div><h1>${p[0]}</h1>${p[1]}</div></div>`}
+
+/* ================= ADMIN (demo) ================= */
+function openAdmin(){$('adminFields').innerHTML=products.map(p=>`<label class="small"><b>${esc(p.name)}</b></label><input class="field" style="margin:4px 0" type="number" step=".01" id="price${p.id}" value="${p.price}"><input class="field" style="margin-bottom:10px" id="bonus${p.id}" value="${esc(p.bonus)}">`).join('');$('adminModal').classList.add('open')}
+function saveAdmin(){products.forEach(p=>{p.price=Number($('price'+p.id).value)||p.price;p.bonus=$('bonus'+p.id).value});save('touliProducts',products.map(p=>({id:p.id,price:p.price,bonus:p.bonus})));$('adminModal').classList.remove('open');route();toast('Saved on this device')}
+
+
+/* ================= AI ASSISTANT (guided, answers from store info) ================= */
+const AI_T={
+en:{title:'Touli Assistant',sub:'Online · instant answers',fab:'Ask Touli AI',hi:'Hi! 👋 I’m the Touli assistant. What do you need help with?',ph:'Type your question…',needHelp:'Need help?',contactUs:'Contact us',talkAI:'Ask Touli AI',secureB:'Secure checkout',madeB:'Made to order',loveB:'Made with care',
+ topics:{order:'Track my order',ship:'Shipping',returns:'Returns',custom:'Custom order',pay:'Payment',person:'Talk to a person'},
+ ans:{order:'Sign in, then open <a href="#/orders" onclick="aiClose()">Your orders</a>. After you order, we contact you to approve your design, then production starts. Have your order number ready if you write to us.',
+  ship:'Standard shipping is <b>FREE for addresses in the USA</b> (5–10 business days). Express is '+'$12.99'+' (2–4 business days, after design approval). Free shipping does not apply outside the USA.',
+  returns:'Personalized items can’t be returned unless they arrive damaged or we made a mistake. Contact us within <b>7 days</b> of delivery with a photo and your order number and we will reprint or refund.',
+  custom:'Yes! We do bulk gifts, wedding favors and business branding. Send your idea, photo or artwork and we confirm details and price <b>before</b> production. <a href="#/page/custom" onclick="aiClose()">Custom orders →</a>',
+  pay:'Pay securely by card or PayPal at checkout. Your card details are entered in our payment provider’s secure fields and are never stored on this site.',
+  person:null},
+ more:'Anything else?',noMatch:'I’m not sure about that one. Would you like to talk to a person?',
+ personTitle:'Talk to a person',personIntro:'Here is everything you need to reach us:',
+ steps:['Have your <b>order number</b> ready (see <a href="#/orders" onclick="aiClose()">Your orders</a>) and the email you used.','For a damaged or wrong item, take a clear <b>photo</b>.','Choose how to reach us below. We answer messages in the order they arrive.'],
+ call:'Call us',mail:'Email us',form:'Send a message form',moreInfo:'Full contact page →',faq:'Help Center'},
+ht:{title:'Asistan Touli',sub:'Anliy · repons rapid',fab:'Mande Touli AI',hi:'Bonjou! 👋 Mwen se asistan Touli. Ki sa ou bezwen?',ph:'Ekri kesyon ou…',needHelp:'Bezwen èd?',contactUs:'Kontakte nou',talkAI:'Mande Touli AI',secureB:'Peman sekirize',madeB:'Fèt sou kòmand',loveB:'Fèt ak swen',
+ topics:{order:'Swiv kòmand mwen',ship:'Livrezon',returns:'Retou',custom:'Kòmand espesyal',pay:'Peman',person:'Pale ak yon moun'},
+ ans:{order:'Konekte, epi louvri <a href="#/orders" onclick="aiClose()">Kòmand ou yo</a>. Apre ou fin kòmande, nou kontakte w pou w apwouve desen an, epi pwodiksyon an kòmanse. Genyen nimewo kòmand ou a lè w ap ekri nou.',
+  ship:'Livrezon estanda se <b>GRATIS pou adrès nan Etazini</b> (5–10 jou ouvrab). Ekspre se $12.99 (2–4 jou ouvrab, apre apwobasyon desen an). Livrezon gratis la pa valab deyò Etazini.',
+  returns:'Atik pèsonalize pa ka retounen sof si yo rive domaje oswa si se nou ki fè erè. Kontakte nou nan <b>7 jou</b> apre livrezon an ak yon foto ak nimewo kòmand ou, epi nou refè l oswa nou rembouse w.',
+  custom:'Wi! Nou fè kado an gwo kantite, souvni maryaj ak mak biznis. Voye ide w, foto oswa desen w, epi nou konfime detay ak pri <b>anvan</b> pwodiksyon. <a href="#/page/custom" onclick="aiClose()">Kòmand espesyal →</a>',
+  pay:'Peye an sekirite ak kat oswa PayPal. Enfòmasyon kat ou antre nan jaden sekirize founisè peman an epi yo pa janm sove sou sit sa a.',
+  person:null},
+ more:'Lòt bagay?',noMatch:'Mwen pa sèten sou sa. Èske w vle pale ak yon moun?',
+ personTitle:'Pale ak yon moun',personIntro:'Men tout sa w bezwen pou rive jwenn nou:',
+ steps:['Prepare <b>nimewo kòmand</b> ou (gade <a href="#/orders" onclick="aiClose()">Kòmand ou yo</a>) ak imèl ou te itilize a.','Si atik la domaje oswa pa kòrèk, pran yon <b>foto</b> klè.','Chwazi kijan pou w rive jwenn nou anba a. Nou reponn mesaj yo nan lòd yo rive.'],
+ call:'Rele nou',mail:'Voye imèl',form:'Fòm mesaj',moreInfo:'Paj kontak konplè →',faq:'Sant èd'}};
+const A=k=>((AI_T[lang]&&AI_T[lang][k])||AI_T.en[k]);
+const aiTx=()=>AI_T[lang]||AI_T.en;
+const AI_KW={order:['track','status','where is','order','kòmand','komand','swiv','pedido','commande'],ship:['ship','deliver','livr','envío','envio','free','gratis','delivery'],returns:['return','refund','damag','retou','rembours','devol','broken','wrong'],custom:['custom','bulk','wedding','business','kantite','espesyal','mayaj','maryaj'],pay:['pay','card','paypal','peman','peye','kat','tarjeta','carte'],person:['person','human','agent','call','phone','talk','pale','moun','telefon','email','contact','imèl','rele','help','èd','ayuda','aide']};
+function aiAdd(html,who){let m=$('aiMsgs');m.insertAdjacentHTML('beforeend',`<div class="aib ${who}">${html}</div>`);m.scrollTop=m.scrollHeight}
+function aiQuick(){let T=aiTx().topics?aiTx():AI_T.en,tp=A('topics');return `<div class="aiq">${Object.keys(tp).map(k=>`<button class="${k==='person'?'p':''}" onclick="aiAsk('${k}')">${tp[k]}</button>`).join('')}</div>`}
+function aiBuild(){$('aiBox').innerHTML=`<div class="aih"><div class="av">${ic('spark')}</div><div><b>${A('title')}</b><small>${A('sub')}</small></div><button onclick="aiClose()" aria-label="Close">×</button></div><div id="aiMsgs"></div><form class="aif" onsubmit="return aiSend(event)"><input id="aiIn" placeholder="${A('ph')}" autocomplete="off"><button aria-label="Send">➤</button></form>`;aiAdd(A('hi'),'bot');aiAdd(aiQuick(),'bot')}
+function aiOpen(topic){if(!$('aiMsgs')||$('aiBox').dataset.l!==lang){aiBuild();$('aiBox').dataset.l=lang}
+ $('aiBox').classList.add('open');$('aiFab').style.display='none';if(topic)aiAsk(topic,true);else setTimeout(()=>$('aiIn').focus(),50)}
+function aiClose(){$('aiBox').classList.remove('open');$('aiFab').style.display=''}
+function aiPerson(){let a=A('steps');aiAdd(`<h4>${A('personTitle')}</h4>${A('personIntro')}<ol class="steps">${a.map(x=>`<li><span>${x}</span></li>`).join('')}</ol><a class="crow" href="tel:${STORE.tel}">${ic('tel')}<span>${A('call')}<br><small class="muted">${STORE.phone}</small></span></a><a class="crow" href="mailto:${STORE.email}">${ic('mail')}<span>${A('mail')}<br><small class="muted">${STORE.email}</small></span></a><a class="crow" href="#/page/contact" onclick="aiClose()">${ic('pen')}<span>${A('form')}</span></a><a class="crow" href="#/page/help" onclick="aiClose()">${ic('spark')}<span>${A('faq')}</span></a>`,'bot')}
+function aiAsk(k,silent){let tp=A('topics');if(!silent)aiAdd(esc(tp[k]),'me');
+ if(k==='person')aiPerson();else aiAdd(A('ans')[k],'bot');
+ aiAdd(A('more')+aiQuick(),'bot')}
+function aiSend(e){e.preventDefault();let i=$('aiIn'),q=i.value.trim();if(!q)return false;i.value='';aiAdd(esc(q),'me');let lq=q.toLowerCase(),best=null,sc=0;
+ for(const k in AI_KW){let n=AI_KW[k].filter(w=>lq.includes(w)).length;if(n>sc){sc=n;best=k}}
+ if(!best){aiAdd(A('noMatch')+'<div class="aiq" style="margin-top:8px"><button class="p" onclick="aiAsk(\'person\')">'+A('topics').person+'</button></div>','bot')}
+ else{if(best==='person')aiPerson();else aiAdd(A('ans')[best],'bot');aiAdd(A('more')+aiQuick(),'bot')}return false}
+function cSend(e){e.preventDefault();let v=id=>$(id).value.trim(),body=`Name: ${v('cfn')}\nEmail: ${v('cfe')}\nOrder #: ${v('cfo')||'-'}\n\n${v('cfm')}`;
+ location.href=`mailto:${STORE.email}?subject=${encodeURIComponent('Touli Store · '+$('cft').value)}&body=${encodeURIComponent(body)}`;toast('Opening your email app…');return false}
+document.body.insertAdjacentHTML('beforeend',`<button id="aiFab" onclick="aiOpen()" aria-label="Ask Touli AI">${ic('spark')}<span>${A('fab')}</span></button><div id="aiBox" role="dialog" aria-label="Assistant"></div>`);
+
+renderChrome();route();setTimeout(oneTap,1500);
+</script></body></html>
