@@ -170,6 +170,15 @@ h1,h2,h3{font-family:Manrope,sans-serif;letter-spacing:-.02em;margin:0 0 10px}
 /* v5: easier tap targets */
 .btn{min-height:48px}.subnav a{padding:11px 16px}.fgrid a{padding:10px 0}.hbtn{min-height:44px}.chips button{min-height:42px}.sw button{width:42px;height:42px}.qtysel button{width:42px;height:42px}
 .catcard,.pc{-webkit-tap-highlight-color:#ff790033}
+
+/* rings */
+.spec{width:100%;border-collapse:collapse;font-size:14px}.spec th,.spec td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}.spec th{width:34%;color:var(--muted);font-weight:600}
+.rguide{margin:-6px 0 18px;border:1px dashed #d8cfc0;border-radius:12px;padding:10px 14px;background:#fffdf9}.rguide summary{cursor:pointer;font-weight:700;font-size:13px;color:#b35300}.rguide table{margin-top:8px}
+select.field{appearance:auto}
+.ringband{background:linear-gradient(120deg,#fff3df,#ffe2bd 55%,#f6cf9d);border-radius:22px;padding:26px;margin:30px 0 6px}.ringband .sechead{margin:0 0 16px}.ringband .sechead p{margin:4px 0 0;color:#6b5a44;font-size:14px}
+.ringband .grid{grid-template-columns:repeat(4,1fr)}
+.gsi-wrap:empty{display:none}.cartsign{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}.cartsign b{display:block;margin-bottom:4px}.cartsign .sso{padding:10px;margin-bottom:8px}
+@media(max-width:980px){.ringband .grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:640px){.ringband{padding:16px;border-radius:16px}.spec th{width:40%}}
 </style></head><body>
 <svg width="0" height="0" style="position:absolute"><defs>
 <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
@@ -209,14 +218,22 @@ h1,h2,h3{font-family:Manrope,sans-serif;letter-spacing:-.02em;margin:0 0 10px}
 <script>
 /* ================= CONFIG ================= */
 const PAYPAL_CLIENT_ID='';      // paste your PayPal client ID → real card + PayPal payments
-const GOOGLE_CLIENT_ID='';      // add for real "Continue with Google"
-const APPLE_CLIENT_ID='';       // add for real "Continue with Apple"
+const GOOGLE_CLIENT_ID='';      // add for real "Continue with Google"  (see README-DEPLOY.txt)
+const APPLE_CLIENT_ID='';       // add your Apple "Services ID" for real "Continue with Apple"
+const APPLE_REDIRECT_URI='';    // leave empty to use this site's address (must match the Return URL set in Apple)
 const STORE={email:'toulistorellc@gmail.com',phone:'(641) 244-1865',tel:'+16412441865',freeShip:50,std:4.99,exp:12.99};
 
 /* ================= DATA ================= */
-const CATS=['Drinkware','Apparel','Prints','Accessories','Bags'];
-const CL={black:['Black','#16181d'],white:['White','#ffffff'],pink:['Pink','#f4a6c0'],blue:['Blue','#4a90d9'],red:['Red','#d93a3a'],navy:['Navy','#1c2b4a'],purple:['Purple','#8a2fb5'],natural:['Natural','#efe6d3'],clear:['Clear','#dfe9ee'],teal:['Teal','#2f9aa8'],gold:['Gold','#d8a82f']};
+const CATS=['Rings','Drinkware','Apparel','Prints','Accessories','Bags'];
+const CL={silver:['Silver','#c8ced8'],rosegold:['Rose gold','#e3a58f'],black:['Black','#16181d'],white:['White','#ffffff'],pink:['Pink','#f4a6c0'],blue:['Blue','#4a90d9'],red:['Red','#d93a3a'],navy:['Navy','#1c2b4a'],purple:['Purple','#8a2fb5'],natural:['Natural','#efe6d3'],clear:['Clear','#dfe9ee'],teal:['Teal','#2f9aa8'],gold:['Gold','#d8a82f']};
 const SZ=['S','M','L','XL','2XL'];
+
+/* ring helpers (used by the Rings category below) */
+const RK='ring rings bague bagy anillo jewelry jewellery engraved band';
+const RSIZES=[];for(let n=5;n<=12;n+=.5)RSIZES.push([String(n),0]);
+const FONT={k:'font',label:'Engraving style',opts:[['Script',0],['Block capitals',0],['Classic serif',0]]};
+const BSTONES=[['January – Garnet',0,'#9b1b30'],['February – Amethyst',0,'#8e5bd0'],['March – Aquamarine',0,'#7fd6e6'],['April – Clear crystal',0,'#e9f3fb'],['May – Emerald',0,'#1f9d63'],['June – Pearl',0,'#efe6dc'],['July – Ruby',0,'#d41f3f'],['August – Peridot',0,'#a8c93a'],['September – Sapphire',0,'#2455c4'],['October – Pink tourmaline',0,'#f07fb0'],['November – Topaz',0,'#f0a52b'],['December – Blue topaz',0,'#36b7d7']];
+const RS=(w,e,set)=>[['Material','316L stainless steel (hypoallergenic, nickel-free)'],['Finish','18K gold, silver or rose-gold PVD plating — tarnish & water resistant'],['Width',w],['Sizes','US 5 – 12 (half sizes available)'],['Engraving',e],['Included',(set||'1 ring')+' + free gift box'],['Production','3–5 business days after you approve the design'],['Shipping','Free standard shipping · USA only'],['Care','Remove for heavy lifting; wipe with a soft cloth. Avoid harsh chemicals.']];
 let products=[
 {id:1,name:'Personalized Tumbler 20oz',cat:'Drinkware',price:24.99,bonus:'Free name personalization',img:'assets/tumbler.jpg',desc:'A stainless steel tumbler printed with your photo and name.',colors:['white','black','pink','purple'],colorLabel:'Tumbler color',sizes:[['20 oz',0],['30 oz',5]],shape:'tall',det:['Double-wall insulated stainless steel','Full-wrap photo & text print','Lid and straw included','Hand wash recommended']},
 {id:2,name:'Photo Canvas Print',cat:'Prints',price:39.99,bonus:'Bonus digital preview',img:'assets/canvas.jpg',desc:'Turn your favorite photo into wall art.',colors:[],sizes:[['8×10 in',0],['12×16 in',15],['16×20 in',30],['20×30 in',55]],shape:'wide',det:['Gallery-wrapped canvas on wooden frame','Fade-resistant ink','Ready to hang','Digital preview sent before printing']},
@@ -234,6 +251,16 @@ let products=[
 {id:13,name:'Haiti Soccer Jersey – White',cat:'Apparel',price:29.99,bonus:'Free name & number',img:'assets/haiti-jersey-white.jpg',desc:'White away-style fan jersey in red and blue — add your name and number.',colors:[],sizes:SZ.map(s=>[s,s==='2XL'?3:0]),shape:'round',det:['Lightweight, breathable sport fabric','Add your name and number on the back','Perfect for games, family gatherings & Haitian Flag Day','Unisex fit']},
 {id:14,name:'Photo Tumbler 40oz with Handle',cat:'Drinkware',price:29.99,bonus:'Free photo & name layout',img:'assets/tumbler-40oz.jpg',desc:'Big 40 oz tumbler with handle, printed with your photo, a birthday message or a name.',colors:['natural','white','black','pink'],colorLabel:'Tumbler color',shape:'tall',det:['40 oz double-wall insulated stainless steel','Comfortable handle, lid and straw included','Photo, name and birthday message print','Perfect birthday & anniversary gift']},
 {id:15,name:'Custom Foldable Phone Case',cat:'Accessories',price:26.99,bonus:'Free design placement',img:'assets/fold-case.jpg',desc:'Slim protective case made for foldable phones, with your photo or design.',colors:['black','navy','white','clear'],colorLabel:'Case color',models:1,foldOnly:['iPhone Duo (2026)','Samsung Galaxy Z Fold8'],shape:'tall',det:['Made for foldable phones','Camera cut-out for your model','Photo or design printed on the back','Scratch-resistant finish']}
+
+,
+/* ===== RINGS (Bagy) ===== */
+{id:16,name:'Custom Name Ring',cat:'Rings',ring:'name',kw:RK,price:29.99,bonus:'Free gift box',img:'assets/ring-name.jpg',desc:'A slim band engraved with a name, a word or a date — worn every day, kept forever.',colors:['gold','silver','rosegold'],colorLabel:'Metal',sizes:RSIZES,sizeLabel:'Ring size (US)',textLabel:'Engraving',textMax:14,textPh:'e.g. Vanessa',noPhoto:1,extra:[FONT],shape:'round',det:['Name, word or date engraved on the outside of the band','Choose gold, silver or rose gold finish','Comfort-fit inside edge for all-day wear','Arrives in a free gift box','Design shown is an example — we confirm the engraving with you before making it'],specs:RS('2 mm – 3 mm','Up to 14 characters')},
+{id:17,name:'Engraved Initial Signet Ring',cat:'Rings',ring:'signet',kw:RK,price:44.99,bonus:'Free plate shape choice',img:'assets/ring-signet.jpg',desc:'A classic signet ring with your initials or a monogram engraved on the face.',colors:['gold','silver','rosegold'],colorLabel:'Metal',sizes:RSIZES,sizeLabel:'Ring size (US)',textLabel:'Initials / monogram',textMax:3,textPh:'e.g. VT',noPhoto:1,extra:[{k:'plate',label:'Plate shape',opts:[['Oval',0],['Round',0],['Square',0]]},FONT],shape:'round',det:['Flat signet face engraved with 1–3 letters','Oval, round or square plate','Heavy, solid-feel band that lasts','Great for graduations, birthdays and family gifts','Design shown is an example — we confirm the engraving with you before making it'],specs:RS('4 mm band · 11 mm face','Up to 3 letters')},
+{id:18,name:'Matching Couple Rings (set of 2)',cat:'Rings',ring:'name',kw:RK,price:54.99,bonus:'Free engraving on both rings',img:'assets/ring-couple.jpg',desc:'Two matching bands, each engraved with your names, a date or a short message.',colors:['gold','silver','rosegold'],colorLabel:'Metal',sizes:RSIZES,sizeLabel:'Ring size — ring 1 (US)',textLabel:'Engraving — ring 1',textMax:14,textPh:'e.g. Her King',noPhoto:1,extra:[{k:'size2',label:'Ring size — ring 2 (US)',opts:RSIZES.map(r=>[r[0],0])},{k:'text2',label:'Engraving — ring 2',text:1,max:14,ph:'e.g. His Queen'},FONT],shape:'round',det:['Set of two matching bands','Each ring has its own size and its own engraving','Perfect for couples, engagements, anniversaries and weddings','Arrives in a double gift box','Design shown is an example — we confirm the engraving with you before making it'],specs:RS('3 mm','Up to 14 characters per ring','Set of 2 rings')},
+{id:19,name:'Birthstone Ring',cat:'Rings',ring:'stone',kw:RK,price:39.99,bonus:'Free inside engraving',img:'assets/ring-birthstone.jpg',desc:'A dainty ring set with the birthstone of your choice — pick the month of someone you love.',colors:['gold','silver','rosegold'],colorLabel:'Metal',sizes:RSIZES,sizeLabel:'Ring size (US)',textLabel:'Inside engraving (optional)',textMax:14,textPh:'e.g. Mom 05.12.2026',noPhoto:1,extra:[{k:'month',label:'Birthstone',opts:BSTONES},FONT],shape:'round',det:['Lab-created birthstone for every month','Secure bezel setting that sits low and snags less','Optional short message engraved inside the band','A thoughtful gift for moms, daughters, friends and new babies','Stone color shown is an example — real stones can vary slightly'],specs:RS('2 mm band · 5 mm stone','Up to 14 characters (inside)')},
+{id:20,name:'Photo Memory Heart Ring',cat:'Rings',ring:'photo',kw:RK,price:36.99,bonus:'Free photo touch-up',img:'assets/ring-photo.jpg',desc:'Keep a tiny portrait close — your photo is set inside a heart-shaped crystal.',colors:['gold','silver','rosegold'],colorLabel:'Metal',sizes:RSIZES,sizeLabel:'Ring size (US)',textLabel:'Inside engraving (optional)',textMax:14,textPh:'e.g. Forever yours',photoLabel:'Your photo (required)',extra:[FONT],shape:'round',det:['Your photo printed and sealed under a heart-shaped crystal','Upload a clear photo — we crop and touch it up for you','Optional short message engraved inside the band','A meaningful gift for couples, moms, kids and memorials','We send a design preview for approval before making it'],specs:RS('2 mm band · 8 mm heart','Up to 14 characters (inside)')},
+{id:21,name:'Haiti Flag Enamel Ring',cat:'Rings',ring:'flag',kw:RK,price:27.99,bonus:'Free gift box',img:'assets/ring-haiti.jpg',desc:'Show your Haitian pride every day — a band with the blue and red of the Haitian flag.',colors:['gold','silver'],colorLabel:'Metal edge',sizes:RSIZES,sizeLabel:'Ring size (US)',textLabel:'Inside engraving (optional)',textMax:14,textPh:'e.g. Ayiti Cheri',noPhoto:1,extra:[FONT],shape:'round',det:['Blue and red enamel stripes inspired by the Haitian flag','Metal edge in gold or silver finish','Perfect for Haitian Flag Day (May 18), games and family gatherings','Optional short message engraved inside the band','Unisex design'],specs:RS('5 mm','Up to 14 characters (inside)')},
+{id:22,name:'Classic Engraved Band',cat:'Rings',ring:'name',kw:RK,price:24.99,bonus:'Free engraving',img:'assets/ring-band.jpg',desc:'A clean, timeless unisex band. Choose your width and add a name, date or short message.',colors:['gold','silver','rosegold'],colorLabel:'Metal',sizes:RSIZES,sizeLabel:'Ring size (US)',textLabel:'Engraving',textMax:16,textPh:'e.g. 06.14.2026',noPhoto:1,extra:[{k:'width',label:'Band width',opts:[['3 mm (slim)',0],['5 mm (classic)',4],['7 mm (wide)',8]]},FONT],shape:'round',det:['Timeless unisex design','3, 5 or 7 mm width','Date, name or short message engraved on the outside','Comfort-fit inside edge','Arrives in a free gift box'],specs:RS('3 / 5 / 7 mm','Up to 16 characters')}
 ];
 try{JSON.parse(localStorage.getItem('touliProducts')||'[]').forEach(s=>{let p=products.find(x=>x.id===s.id);if(p){p.price=s.price;p.bonus=s.bonus}})}catch(e){}
 
@@ -314,13 +341,14 @@ function pgHome(){setTitle('');
  $('app').innerHTML=`<section class="hero"><div class="hero-in"><div><div class="eyebrow">YOUR IDEAS. YOUR STYLE. YOUR STORE.</div><h1>Make every gift <span>personal.</span></h1><p>Custom creations for the moments, people and brands that matter. Pick a product, choose your style, add your photo and name — and see it before you order.</p><a class="btn" href="#/shop">Explore the collection →</a></div><div class="hero-art"><img src="assets/mug.jpg" alt=""><img src="assets/canvas.jpg" alt=""><img src="assets/tumbler.jpg" alt=""></div></div></section>
  <div class="wrap"><div class="cats">${['Drinkware','Apparel','Prints','Accessories'].map(tile).join('')}</div>
  <div class="trust"><div>${ic('spark')}Made personal</div><div>${ic('truck')}${t('freeUS')}</div><div>${ic('lock')}Secure checkout</div><div>${ic('heart')}Thoughtful gifts</div></div>
+ <div class="ringband"><div class="sechead"><div><h2>Custom rings · Bagy</h2><p>Engraved with a name, date or photo — in gold, silver or rose gold.</p></div><a href="#/shop?cat=Rings">${t('viewAll')} ›</a></div><div class="grid">${products.filter(p=>p.cat==='Rings').slice(0,4).map(card).join('')}</div></div>
  <div class="sechead"><h2>Best gifts to personalize</h2><a href="#/shop">${t('viewAll')} ›</a></div><div class="grid">${products.slice(0,8).map(card).join('')}</div>
  <div class="sechead"><h2>Birthday & party favorites</h2><a href="#/shop">${t('viewAll')} ›</a></div><div class="grid">${products.filter(p=>[5,6,7,8].includes(p.id)).map(card).join('')}</div>
- <div class="sechead"><h2>New: caps, jerseys, jackets & more</h2><a href="#/shop">${t('viewAll')} ›</a></div><div class="grid">${products.filter(p=>p.id>=9).map(card).join('')}</div></div>`}
+ <div class="sechead"><h2>New: caps, jerseys, jackets & more</h2><a href="#/shop">${t('viewAll')} ›</a></div><div class="grid">${products.filter(p=>p.id>=9&&p.cat!=='Rings').map(card).join('')}</div></div>`}
 
 /* ================= SHOP ================= */
 function pgShop(q){let cat=q.get('cat')||'',term=(q.get('q')||'').toLowerCase(),sort=q.get('sort')||'';setTitle(cat||'Shop');
- let list=products.filter(p=>(!cat||p.cat===cat)&&(!term||(p.name+p.desc+p.cat).toLowerCase().includes(term)));
+ let list=products.filter(p=>(!cat||p.cat===cat)&&(!term||(p.name+p.desc+p.cat+(p.kw||'')).toLowerCase().includes(term)));
  if(sort==='lo')list.sort((a,b)=>a.price-b.price);if(sort==='hi')list.sort((a,b)=>b.price-a.price);
  let base=t=>'#/shop?'+(t?t:'');
  $('app').innerHTML=`<div class="wrap"><div class="crumbs"><a href="#/">${t('home')}</a> › ${cat||t('shop')}${term?` › “${esc(term)}”`:''}</div><div class="shop"><aside class="side"><h4>Category</h4><a href="#/shop" class="${!cat?'on':''}">${t('allGifts')}</a>${CATS.map(c=>`<a href="#/shop?cat=${c}" class="${c===cat?'on':''}">${c}</a>`).join('')}</aside>
@@ -330,7 +358,7 @@ function sortBy(v){let h=location.hash.split('?');let q=new URLSearchParams(h[1]
 
 /* ================= PRODUCT ================= */
 function pgProduct(id){let p=products.find(x=>x.id===id);if(!p)return pgHome();setTitle(p.name);
- draft={id,color:p.colors[0]||'',size:p.sizes?0:-1,model:p.models?modelsFor('iphone',p)[0][0]:'',brand:'iphone',text:'',photo:'',qty:1,tab:'preview'};
+ draft={id,color:p.colors[0]||'',size:p.sizes&&!p.ring?0:-1,model:p.models?modelsFor('iphone',p)[0][0]:'',brand:'iphone',text:'',photo:'',qty:1,tab:'preview',x:Object.fromEntries((p.extra||[]).map(e=>[e.k,e.opts?e.opts[0][0]:'']))};
  let rv=reviews[id]||[],avg=rate(id);
  let similar=products.filter(x=>x.id!==id).sort((a,b)=>(b.cat===p.cat)-(a.cat===p.cat)).slice(0,4);
  $('app').innerHTML=`<div class="wrap"><div class="crumbs"><a href="#/">${t('home')}</a> › <a href="#/shop?cat=${p.cat}">${p.cat}</a> › ${esc(p.name)}</div>
@@ -339,13 +367,16 @@ function pgProduct(id){let p=products.find(x=>x.id===id);if(!p)return pgHome();s
  <div class="big" id="pprice"></div><p class="muted">${esc(p.desc)}</p><span class="pill">${ic('gift')} ${t('bonusL')}: ${esc(p.bonus)}</span>
  ${p.colors.length?`<div class="opt"><label>${p.colorLabel||t('color')}: <span id="clbl"></span></label><div class="sw">${p.colors.map(c=>`<button type="button" title="${CL[c][0]}" style="background:${CL[c][1]}" data-c="${c}" onclick="pick('color','${c}')"></button>`).join('')}</div></div>`:''}
  ${p.models?`<div class="opt"><label>${t('model')}</label><div class="chips brand"><button type="button" data-b="iphone" onclick="setBrand('iphone')">iPhone</button><button type="button" data-b="android" onclick="setBrand('android')">Android</button></div><select class="field" id="msel" style="margin-top:10px" onchange="draft.model=this.value;drawPrev()"></select></div>`:''}
- ${p.sizes?`<div class="opt"><label>${t('size')}</label><div class="chips">${p.sizes.map((s,i)=>`<button type="button" data-s="${i}" onclick="pick('size',${i})">${s[0]}${s[1]?` <span class="small">+${money(s[1])}</span>`:''}</button>`).join('')}</div></div>`:''}
- <div class="opt"><label>${t('yourText')} <span>(optional)</span></label><textarea class="field" maxlength="80" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();addDraft()}" oninput="draft.text=this.value;drawPrev()" placeholder="e.g. Happy Birthday Vanessa 🎉"></textarea></div>
- <div class="opt"><label>${t('yourPhoto')} <span>(optional)</span></label><input class="field" type="file" accept="image/*" onchange="onPhoto(this)"></div>
+ ${p.sizes?`<div class="opt"><label>${p.sizeLabel||t('size')}</label><div class="chips">${p.sizes.map((s,i)=>`<button type="button" data-s="${i}" onclick="pick('size',${i})">${s[0]}${s[1]?` <span class="small">+${money(s[1])}</span>`:''}</button>`).join('')}</div></div>`:''}
+ ${p.ring?ringGuide():''}
+ ${(p.extra||[]).map(e=>e.opts?`<div class="opt"><label>${e.label}</label><select class="field" onchange="draft.x['${e.k}']=this.value;upd();drawPrev()">${e.opts.map(o=>`<option value="${esc(o[0])}">${esc(o[0])}${o[1]?' (+'+money(o[1])+')':''}</option>`).join('')}</select></div>`:`<div class="opt"><label>${e.label} <span>(optional)</span></label><input class="field" maxlength="${e.max||30}" placeholder="${esc(e.ph||'')}" oninput="draft.x['${e.k}']=this.value"></div>`).join('')}
+ <div class="opt"><label>${p.textLabel||t('yourText')}${/optional/i.test(p.textLabel||'')||p.ring?'':' <span>(optional)</span>'}</label>${p.ring?`<input class="field" maxlength="${p.textMax||20}" onkeydown="if(event.key==='Enter'){event.preventDefault();addDraft()}" oninput="draft.text=this.value;drawPrev()" placeholder="${esc(p.textPh||'')}">`:`<textarea class="field" maxlength="80" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();addDraft()}" oninput="draft.text=this.value;drawPrev()" placeholder="e.g. Happy Birthday Vanessa 🎉"></textarea>`}</div>
+ ${p.noPhoto?'':`<div class="opt"><label>${p.photoLabel||(t('yourPhoto')+' <span>(optional)</span>')}</label><input class="field" type="file" accept="image/*" onchange="onPhoto(this)"></div>`}
  <div class="buybox"><div class="price" id="bprice"></div><p class="green">${ic('truck')} ${t('freeUS')}</p><p class="small">Final design is confirmed with you before printing.</p>
  <div class="row"><span class="qtysel"><button onclick="dq(-1)">−</button><span id="dq">1</span><button onclick="dq(1)">+</button></span></div>
  <button class="btn block" onclick="addDraft()">${ic('cart')} ${t('addCart')}</button><button class="btn dark block" style="margin-top:8px" onclick="addDraft(true)">${t('buyNow')}</button><div class="secure">${ic('lock')} ${t('secure')}</div></div></div></div>
  <div class="card tabs-sec"><h3>${t('desc')}</h3><ul class="det">${p.det.map(d=>`<li>${esc(d)}</li>`).join('')}</ul></div>
+ ${p.specs?`<div class="card tabs-sec"><h3>Product details</h3><table class="spec">${p.specs.map(r=>`<tr><th>${esc(r[0])}</th><td>${esc(r[1])}</td></tr>`).join('')}</table></div>`:''}
  <div class="card tabs-sec" id="rev"><h3>${t('reviews')}</h3><div class="reviews"><div><div class="big" style="font-size:40px;font-weight:800">${rv.length?avg.toFixed(1):'–'}</div><div class="stars">${rv.length?stars(avg):''}</div><p class="small">${rv.length} reviews</p><button class="btn ghost" onclick="reviewForm(${id})">${t('writeRev')}</button></div><div id="revlist">${rv.length?rv.map(r=>`<div class="rev"><div class="stars">${stars(r.stars)}</div><b>${esc(r.name)}</b> <span class="small">· verified account</span><p>${esc(r.text)}</p></div>`).join(''):`<p class="muted">${t('noRev')}</p>`}</div></div></div>
  <div class="sechead"><h2>${t('similar')}</h2></div><div class="grid">${similar.map(card).join('')}</div></div>`;
  pick('color',draft.color,1);pick('size',draft.size,1);if(p.models)setBrand('iphone');else gtab('preview');upd()}
@@ -353,7 +384,9 @@ function pick(k,v,silent){draft[k]=v;let p=products.find(x=>x.id===draft.id);
  document.querySelectorAll('[data-c]').forEach(b=>b.classList.toggle('on',b.dataset.c===draft.color));
  document.querySelectorAll('[data-s]').forEach(b=>b.classList.toggle('on',+b.dataset.s===draft.size));
  let l=$('clbl');if(l&&draft.color)l.textContent=CL[draft.color][0];upd();drawPrev()}
-function unit(){let p=products.find(x=>x.id===draft.id);return p.price+(p.sizes&&draft.size>=0?p.sizes[draft.size][1]:0)}
+function ringGuide(){let rows=[5,6,7,8,9,10,11,12].map(n=>{let d=11.63+.8128*n;return `<tr><td>${n}</td><td>${d.toFixed(1)} mm</td><td>${(Math.PI*d).toFixed(1)} mm</td></tr>`}).join('');
+ return `<details class="rguide"><summary>Not sure of your size? Ring size guide</summary><p class="small">Measure a ring that fits you (inside diameter) or wrap a string around your finger and measure its length. Choose the closest size. If you are between sizes, go up one half size.</p><table class="spec"><tr><th>US size</th><th>Inside diameter</th><th>Circumference</th></tr>${rows}</table></details>`}
+function unit(){let p=products.find(x=>x.id===draft.id);return p.price+(p.sizes&&draft.size>=0?p.sizes[draft.size][1]:0)+(p.extra||[]).reduce((a,e)=>a+(e.opts?((e.opts.find(o=>o[0]===draft.x[e.k])||[0,0])[1]):0),0)}
 function upd(){let u=unit();$('pprice')&&($('pprice').textContent=money(u));$('bprice')&&($('bprice').textContent=money(u*draft.qty));$('dq')&&($('dq').textContent=draft.qty)}
 function dq(d){draft.qty=Math.max(1,Math.min(50,draft.qty+d));upd()}
 
@@ -371,7 +404,7 @@ function phoneSVG(view,model,c){let col=c.color?CL[c.color][1]:'#16181d',clear=c
  if(view==='front')return`<svg class="psvg" viewBox="0 0 200 410"><defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9a3c"/><stop offset="1" stop-color="#7a3cff"/></linearGradient></defs><rect x="30" y="16" width="140" height="368" rx="30" fill="${clear?'#dfe9ee':col}" stroke="#0003" stroke-width="2"/><rect x="38" y="24" width="124" height="352" rx="23" fill="url(#${id})"/>${c.photo?`<image href="${c.photo}" x="38" y="24" width="124" height="352" preserveAspectRatio="xMidYMid slice"/>`:''}<rect x="86" y="34" width="28" height="9" rx="4.5" fill="#000"/><text x="100" y="120" text-anchor="middle" font-size="34" font-weight="700" fill="#fff" font-family="DM Sans,sans-serif">9:41</text>${lab}</svg>`;
  let sz=Math.max(13,28-(c.text||'').length*.4);
  return`<svg class="psvg" viewBox="0 0 200 410"><defs><clipPath id="${id}"><rect x="30" y="16" width="140" height="368" rx="30"/></clipPath></defs><g clip-path="url(#${id})"><rect x="30" y="16" width="140" height="368" fill="${clear?'#e8eef2':col}"/>${c.photo?`<image href="${c.photo}" x="30" y="16" width="140" height="368" preserveAspectRatio="xMidYMid slice"/>`:`<rect x="46" y="120" width="108" height="190" rx="12" fill="#ffffff33" stroke="${fg}" stroke-opacity=".5" stroke-dasharray="5 4"/><text x="100" y="220" text-anchor="middle" font-size="11" fill="${fg}" font-family="DM Sans,sans-serif">${esc(t('yourPhoto'))}</text>`}${c.text?`<text x="100" y="352" text-anchor="middle" font-size="${sz}" fill="${c.photo?'#fff':fg}" stroke="${c.photo?'#0006':'none'}" stroke-width=".6" font-family="Dancing Script,cursive">${esc(c.text)}</text>`:''}${camSVG(k)}</g><rect x="30" y="16" width="140" height="368" rx="30" fill="none" stroke="#0003" stroke-width="3"/>${lab}</svg>`}
-function genSVG(p,v,c){let col=c.color?CL[c.color][1]:'#e9e2d6',fg=DK.includes(c.color)?'#fff':'#16181d';
+function genSVG(p,v,c){if(p.ring)return ringSVG(p,v,c);let col=c.color?CL[c.color][1]:'#e9e2d6',fg=DK.includes(c.color)?'#fff':'#16181d';
  const ph=(x,y,w,h)=>c.photo?`<image href="${c.photo}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid slice"/>`:`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="#ffffff44" stroke="${fg}" stroke-opacity=".45" stroke-dasharray="4 3"/>`;
  const W=b=>`<svg class="psvg" viewBox="0 0 200 220">${b}</svg>`;
  if(p.id===1)return v==='top'?W(`<circle cx="100" cy="110" r="72" fill="#222"/><circle cx="100" cy="110" r="58" fill="#111"/><circle cx="118" cy="96" r="6" fill="#9aa"/>`):W(`<rect x="62" y="24" width="76" height="14" rx="6" fill="#222"/><rect x="104" y="2" width="6" height="24" rx="3" fill="#9aa"/><path d="M64 38H136L128 200Q127 208 119 208H81Q73 208 72 200Z" fill="${col}" stroke="#0002"/>${ph(78,70,44,90)}`);
@@ -380,69 +413,140 @@ function genSVG(p,v,c){let col=c.color?CL[c.color][1]:'#e9e2d6',fg=DK.includes(c
  if(p.id===6||p.id===7)return W(`<path d="M62 30L18 62L38 100L58 90V196H142V90L162 100L182 62L138 30Q100 52 62 30Z" fill="${col}" stroke="#0002"/>`);
  if(p.id===2)return W(`<rect x="56" y="30" width="28" height="160" fill="#c9a77a" stroke="#0002"/><polygon points="84,30 162,44 162,176 84,190" fill="#f4efe8" stroke="#0002"/><text x="123" y="116" text-anchor="middle" font-size="9" fill="#667" font-family="DM Sans,sans-serif">1.5″</text>`);
  return W(`<rect x="20" y="50" width="160" height="120" fill="${col}" stroke="#0002"/>${ph(40,70,120,80)}`+[[26,56],[174,56],[26,164],[174,164]].map(q=>`<circle cx="${q[0]}" cy="${q[1]}" r="5" fill="#9aa" stroke="#667"/>`).join(''))}
-const ANG=p=>p.models?['back','front','side']:({1:['side','top'],4:['side','top'],5:['back'],6:['back'],7:['back'],2:['side'],8:['detail']}[p.id]||[]);
+/* ---- ring preview (drawn in code, updates live with metal / size / engraving) ---- */
+const METAL={gold:['#fbe9a6','#d8a82f','#8a6414'],silver:['#fafbfd','#c8ced8','#737c8c'],rosegold:['#fbd9cb','#e3a58f','#9c5d4a']};
+function ringSVG(p,v,c){
+ const [lt,md,dk]=METAL[c.color]||METAL.gold,u='r'+Math.random().toString(36).slice(2,7),X=c.x||{};
+ const H=p.id===22?({'3 mm (slim)':72,'5 mm (classic)':96,'7 mm (wide)':124}[X.width]||96):({signet:104,flag:100,name:80}[p.ring]||70);
+ const cx=450,rx=290,side=v==='side',cy=side?470:430,ry=side?70:150,tk=side?40:46,rx2=rx-tk,ry2=ry*rx2/rx;
+ const E=(y,a,b)=>`M${cx-a} ${y}A${a} ${b} 0 0 0 ${cx+a} ${y}A${a} ${b} 0 0 0 ${cx-a} ${y}Z`;
+ const face=`M${cx-rx} ${cy}V${cy+H}A${rx} ${ry} 0 0 0 ${cx+rx} ${cy+H}V${cy}A${rx} ${ry} 0 0 1 ${cx-rx} ${cy}Z`;
+ const sil=`M${cx-rx} ${cy}V${cy+H}A${rx} ${ry} 0 0 0 ${cx+rx} ${cy+H}V${cy}A${rx} ${ry} 0 0 0 ${cx-rx} ${cy}Z`;
+ const stripe=(a,b,col)=>`<path d="M${cx-rx} ${cy+H*a}V${cy+H*b}A${rx} ${ry} 0 0 0 ${cx+rx} ${cy+H*b}V${cy+H*a}A${rx} ${ry} 0 0 1 ${cx-rx} ${cy+H*a}Z" fill="${col}"/>`;
+ const fk=X.font||'Script',fam={Script:"'Dancing Script',cursive",'Block capitals':"Manrope,sans-serif",'Classic serif':"Georgia,serif"}[fk]||"'Dancing Script',cursive";
+ const cw={Script:.42,'Block capitals':.74,'Classic serif':.56}[fk]||.5;
+ let raw=(c.text||'').trim(),txt=fk==='Block capitals'?raw.toUpperCase():raw;
+ const outer=p.ring==='name';
+ let eng='';
+ if(outer){const shown=txt||(fk==='Block capitals'?'YOUR NAME':'Your name'),ghost=!txt,fs=Math.min(H*(fk==='Script'?.62:.4),470/(shown.length*cw)),by=cy+H*(fk==='Script'?.74:.68);
+  eng=`<path id="${u}p" d="M${cx-rx} ${by}A${rx} ${ry} 0 0 0 ${cx+rx} ${by}" fill="none"/><g opacity="${ghost?.5:1}" font-family="${fam}" font-size="${fs}" font-weight="${fk==='Script'?700:800}" letter-spacing="${fk==='Block capitals'?3:0}"><text fill="${lt}" opacity=".85" transform="translate(0 2.5)"><textPath href="#${u}p" startOffset="50%" text-anchor="middle">${esc(shown)}</textPath></text><text fill="${dk}"><textPath href="#${u}p" startOffset="50%" text-anchor="middle">${esc(shown)}</textPath></text></g>`}
+ const bz=(gx,gy,w,h)=>`<ellipse cx="${gx}" cy="${gy+14}" rx="${w+8}" ry="${h+8}" fill="${dk}"/><ellipse cx="${gx}" cy="${gy+4}" rx="${w+8}" ry="${h+8}" fill="url(#${u}t)" stroke="${dk}" stroke-opacity=".5" stroke-width="2"/>`;
+ const gem=(gx,gy,r,col)=>{const pt=(q)=>[...Array(8)].map((_,i)=>{const a=Math.PI/8+i*Math.PI/4;return (gx+Math.cos(a)*q).toFixed(1)+','+(gy+Math.sin(a)*q*.8).toFixed(1)});const O=pt(r),I=pt(r*.52);
+  return bz(gx,gy,r,r*.8)+`<polygon points="${O.join(' ')}" fill="${col}" stroke="#0003" stroke-width="2"/>`+O.map((q,i)=>`<polygon points="${q} ${O[(i+1)%8]} ${I[(i+1)%8]} ${I[i]}" fill="${i%2?'#fff':'#000'}" opacity="${i%2?.2:.16}"/>`).join('')+`<polygon points="${I.join(' ')}" fill="#fff" opacity=".3"/><path d="M${gx-r*.45} ${gy-r*.3}l${r*.3} ${-r*.12}" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".85"/>`};
+ const topY=cy-ry-34;let top='',cap='';
+ if(p.ring==='stone'){const m=BSTONES.find(b=>b[0]===X.month)||BSTONES[4];top=gem(cx,topY-8,74,m[2]);if(raw)cap=raw}
+ if(p.ring==='photo'){const hp='M0,34C-64,-8-52,-56-24,-56C-8,-56 0,-46 0,-36C0,-46 8,-56 24,-56C52,-56 64,-8 0,34Z';
+  top=`<g transform="translate(${cx} ${topY-14}) scale(1.5 1.25)"><path d="${hp}" fill="${dk}" transform="translate(0 16) scale(1.16)"/><path d="${hp}" fill="url(#${u}t)" transform="translate(0 5) scale(1.16)" stroke="${dk}" stroke-opacity=".5" stroke-width="2"/><clipPath id="${u}c"><path d="${hp}"/></clipPath>${c.photo?`<image href="${c.photo}" x="-64" y="-58" width="128" height="96" preserveAspectRatio="xMidYMid slice" clip-path="url(#${u}c)"/>`:`<path d="${hp}" fill="#f4b6cf"/><path d="M-30-30q10-16 26-14" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round" opacity=".8"/>`}<path d="${hp}" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="3"/></g>`;if(raw)cap=raw}
+ if(p.ring==='signet'){const sh=X.plate||'Oval',ini=(fk==='Block capitals'?raw.toUpperCase():raw)||(fk==='Block capitals'?'AB':'Ab'),ew=sh==='Square'?200:sh==='Round'?100:124,eh=sh==='Square'?112:sh==='Round'?72:80,sy=topY-4;
+  const shp=(y,w,h,extra='')=>sh==='Square'?`<rect x="${cx-w}" y="${y-h}" width="${2*w}" height="${2*h}" rx="16" ${extra}/>`:`<ellipse cx="${cx}" cy="${y}" rx="${w}" ry="${h}" ${extra}/>`;
+  const sw=sh==='Square'?ew/2:ew,shh=sh==='Square'?eh/2:eh;
+  top=shp(sy+16,sw,shh,`fill="${dk}"`)+shp(sy,sw,shh,`fill="url(#${u}t)" stroke="${dk}" stroke-opacity=".55" stroke-width="2.5"`)+shp(sy,sw-14,shh-10,`fill="none" stroke="${dk}" stroke-opacity=".35" stroke-width="2"`)+`<g font-family="${fam}" font-size="${Math.min(78,200/(ini.length*cw+.1))}" font-weight="${fk==='Script'?700:800}" text-anchor="middle" letter-spacing="${fk==='Block capitals'?4:0}"><text x="${cx}" y="${sy+22}" fill="${lt}" opacity=".85" transform="translate(0 2.5)">${esc(ini)}</text><text x="${cx}" y="${sy+22}" fill="${dk}">${esc(ini)}</text></g>`}
+ if(p.ring==='flag'&&raw)cap=raw;
+ const flag=p.ring==='flag'?`<clipPath id="${u}f"><path d="${face}"/></clipPath><g clip-path="url(#${u}f)">${stripe(.1,.5,'#00209f')}${stripe(.5,.9,'#d21034')}</g>`:'';
+ const body=`<ellipse cx="${cx}" cy="${cy+H+8}" rx="${rx*1.03}" ry="${ry*1.02}" fill="#3a2a10" opacity=".25" filter="url(#${u}b)"/>
+ <path d="${sil}" fill="url(#${u}o)"/>${flag}
+ <path d="${E(cy,rx,ry)}${E(cy,rx2,ry2)}" fill-rule="evenodd" fill="url(#${u}t)"/>
+ <clipPath id="${u}h"><path d="${E(cy,rx2,ry2)}"/></clipPath><g clip-path="url(#${u}h)"><path d="${E(cy,rx2,ry2)}" fill="url(#${u}i)"/><path d="${E(cy+H,rx2,ry2)}" fill="url(#${u}g)"/></g>
+ <path d="${E(cy,rx2,ry2)}" fill="none" stroke="${dk}" stroke-opacity=".4" stroke-width="2"/><path d="${E(cy,rx,ry)}" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="3"/>
+ <path d="M${cx-rx*.96} ${cy+H*.1}A${rx*.96} ${ry*.96} 0 0 0 ${cx+rx*.96} ${cy+H*.1}" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="5" stroke-linecap="round"/>
+ <path d="M${cx-rx} ${cy+H-2}A${rx} ${ry} 0 0 0 ${cx+rx} ${cy+H-2}" fill="none" stroke="${dk}" stroke-opacity=".4" stroke-width="3"/>${eng}${top}`;
+ let tf='';if(v==='detail'){const f=(outer||p.ring==='flag')?[cy+ry+H*.5,2.1]:[topY,2.2];tf=`transform="translate(450 450) scale(${f[1]}) translate(-450 -${f[0]})"`}
+ return `<svg class="psvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900"><defs><radialGradient id="${u}g" gradientUnits="userSpaceOnUse" cx="450" cy="340" r="700"><stop offset="0" stop-color="#fffaf2"/><stop offset="1" stop-color="#eadfce"/></radialGradient>
+ <linearGradient id="${u}o" x1="0" x2="1"><stop offset="0" stop-color="${dk}"/><stop offset=".16" stop-color="${md}"/><stop offset=".38" stop-color="${lt}"/><stop offset=".55" stop-color="${md}"/><stop offset=".85" stop-color="${dk}"/><stop offset="1" stop-color="${md}"/></linearGradient>
+ <linearGradient id="${u}t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${lt}"/><stop offset="1" stop-color="${md}"/></linearGradient>
+ <linearGradient id="${u}i" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${dk}"/><stop offset="1" stop-color="${md}"/></linearGradient>
+ <filter id="${u}b" x="-20%" y="-30%" width="140%" height="180%"><feGaussianBlur stdDeviation="16"/></filter></defs>
+ <rect width="900" height="900" fill="url(#${u}g)"/><g ${tf}>${body}</g>${cap&&v!=='detail'?`<text x="450" y="842" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="28" font-weight="600" fill="#7a6e5d">Inside engraving: “${esc(cap)}”</text>`:''}</svg>`}
+
+const ANG=p=>p.ring?['side','detail']:p.models?['back','front','side']:({1:['side','top'],4:['side','top'],5:['back'],6:['back'],7:['back'],2:['side'],8:['detail']}[p.id]||[]);
 const vlabel=k=>t(({preview:'vPrev',photo:'vPhoto',back:'vBack',front:'vFront',side:'vSide',top:'vTop',detail:'vDetail'})[k]);
 function setBrand(b){draft.brand=b;draft.model=modelsFor(b)[0][0];document.querySelectorAll('[data-b]').forEach(x=>x.classList.toggle('on',x.dataset.b===b));$('msel').innerHTML=modelsFor(b).map(m=>`<option>${m[0]}</option>`).join('');gtab(draft.tab||'preview')}
 function gtab(x){draft.tab=x;let p=products.find(q=>q.id===draft.id),g=$('gview');if(!g)return;
  if(x==='photo')g.innerHTML=`<div class="gmain"><img src="${p.img}" alt="${esc(p.name)}"></div>`;
- else if(x==='preview'&&!p.models){g.innerHTML='<div class="prev" id="prev"></div>';drawShape()}
+ else if(x==='preview'&&!p.models&&!p.ring){g.innerHTML='<div class="prev" id="prev"></div>';drawShape()}
  else g.innerHTML=`<div class="prev"><span class="vlbl">${vlabel(x)}</span>${p.models?phoneSVG(x==='preview'?'back':x,draft.model,draft):genSVG(p,x,draft)}</div>`;
- let keys=['preview','photo',...ANG(p)];$('thumbs').innerHTML=keys.map(k=>`<button type="button" class="${k===x?'on':''}" aria-label="${vlabel(k)}" title="${vlabel(k)}" onclick="gtab('${k}')">${k==='photo'?`<img src="${p.img}" alt="">`:k==='preview'?(p.models?phoneSVG('back',draft.model,draft):`<span style="width:70%;height:70%;border-radius:10px;background:${draft.color?CL[draft.color][1]:'#ece6dd'}"></span>`):p.models?phoneSVG(k,draft.model,draft):genSVG(p,k,draft)}</button>`).join('')}
+ let keys=['preview','photo',...ANG(p)];$('thumbs').innerHTML=keys.map(k=>`<button type="button" class="${k===x?'on':''}" aria-label="${vlabel(k)}" title="${vlabel(k)}" onclick="gtab('${k}')">${k==='photo'?`<img src="${p.img}" alt="">`:k==='preview'?(p.models?phoneSVG('back',draft.model,draft):p.ring?genSVG(p,'preview',draft):`<span style="width:70%;height:70%;border-radius:10px;background:${draft.color?CL[draft.color][1]:'#ece6dd'}"></span>`):p.models?phoneSVG(k,draft.model,draft):genSVG(p,k,draft)}</button>`).join('')}
 function drawPrev(){gtab(draft.tab||'preview')}
 function drawShape(){let el=$('prev');if(!el)return;let p=products.find(x=>x.id===draft.id);let bg=draft.color?CL[draft.color][1]:'#ece6dd';
  let fg=draft.color?(DK.includes(draft.color)?'#fff':'#16181d'):'#333';el.style.background='#f3f0ec';
  el.innerHTML=`<div class="shape ${p.shape}" style="background:${bg};color:${fg}"><div class="ph ${draft.photo?'has':''}" style="${draft.photo?`background-image:url(${draft.photo})`:`color:${fg};border-color:${fg}55`}">${draft.photo?'':t('yourPhoto')}</div>${draft.text?`<div class="tx">${esc(draft.text)}</div>`:''}</div><div class="note">${esc(p.name)}${draft.color?' · '+CL[draft.color][0]:''}</div>`}
 function onPhoto(inp){let f=inp.files[0];if(!f)return;if(f.size>15e6)return toast('Photo too large (max 15 MB)');let r=new FileReader();r.onload=()=>{let im=new Image();im.onload=()=>{let s=Math.min(1,700/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);draft.photo=c.toDataURL('image/jpeg',.82);gtab('preview')};im.src=r.result};r.readAsDataURL(f)}
-function addDraft(buy){let p=products.find(x=>x.id===draft.id);let o={key:Date.now()+''+Math.random(),id:p.id,name:p.name,img:p.img,price:unit(),qty:draft.qty,color:draft.color,size:draft.size>=0?p.sizes[draft.size][0]:'',model:draft.model,text:draft.text,photo:draft.photo?'yes':'',thumb:draft.photo?thumbOf(draft.photo):''};
+function addDraft(buy){let p=products.find(x=>x.id===draft.id);
+ if(p.ring&&draft.size<0){toast('Please choose your ring size');let el=document.querySelector('[data-s]');el&&el.scrollIntoView({behavior:'smooth',block:'center'});return}
+ if(/required/i.test(p.photoLabel||'')&&!draft.photo){toast('Please upload your photo first');return}
+ let o={x:Object.fromEntries((p.extra||[]).filter(e=>draft.x[e.k]).map(e=>[e.label,draft.x[e.k]])),tl:p.textLabel||'',sl:p.sizeLabel||'',cl:p.colorLabel||'',key:Date.now()+''+Math.random(),id:p.id,name:p.name,img:p.img,price:unit(),qty:draft.qty,color:draft.color,size:draft.size>=0?p.sizes[draft.size][0]:'',model:draft.model,text:draft.text,photo:draft.photo?'yes':'',thumb:p.ring?ringThumb():draft.photo?thumbOf(draft.photo):''};
  cart.push(o);save('touliCart',cart);$('cn').textContent=count();toast('Added to your cart ✓');if(buy)location.hash='#/cart'}
-function thumbOf(d){return d}   // already downscaled to 700px
+function thumbOf(d){return d}
+const ringThumb=()=>{let p=products.find(x=>x.id===draft.id);return 'data:image/svg+xml;utf8,'+encodeURIComponent(ringSVG(p,'preview',draft).replace('<svg ','<svg width="360" height="360" '))}   // already downscaled to 700px
 function reviewForm(id){if(!user){toast('Please sign in to write a review');return location.hash='#/account?next=product/'+id}
  let txt=prompt('Your review:');if(!txt)return;let s=+prompt('Rating 1–5:','5');if(!(s>=1&&s<=5))return;(reviews[id]=reviews[id]||[]).push({name:user.name,stars:s,text:txt.slice(0,600)});save('touliReviews',reviews);pgProduct(id)}
 
 /* ================= CART ================= */
-function lineOpts(x){return [x.color&&CL[x.color]?'Color: '+CL[x.color][0]:'',x.size?'Size: '+x.size:'',x.model?'Model: '+x.model:'',x.text?'Text: “'+esc(x.text)+'”':'',x.photo?'Photo attached':''].filter(Boolean).join(' · ')}
+function lineOpts(x){return [x.color&&CL[x.color]?(x.cl||'Color')+': '+CL[x.color][0]:'',x.size?(x.sl||'Size')+': '+x.size:'',x.model?'Model: '+x.model:'',...Object.entries(x.x||{}).map(([k,v])=>esc(k)+': '+esc(v)),x.text?esc(x.tl||'Text')+': “'+esc(x.text)+'”':'',x.photo?'Photo attached':''].filter(Boolean).join(' · ')}
 function pgCart(){setTitle(t('cart'));let sub=total();
  if(!cart.length){$('app').innerHTML=`<div class="wrap"><div class="card empty">${ic('cart')}<h2>${t('empty')}</h2><a class="btn" href="#/shop">${t('keep')}</a></div></div>`;return}
  
  $('app').innerHTML=`<div class="wrap"><h1>${t('cart')}</h1><div class="cartpg"><div class="card">${cart.map((x,i)=>`<div class="cl"><img src="${x.thumb||x.img}" alt=""><div><h4><a href="#/product/${x.id}" style="text-decoration:none">${esc(x.name)}</a></h4><div class="opts">${lineOpts(x)}</div><div class="acts"><span class="qtysel"><button onclick="cq(${i},-1)">−</button><span>${x.qty}</span><button onclick="cq(${i},1)">+</button></span><a onclick="rm(${i})">${t('remove')}</a></div></div><div class="pr price">${money(x.price*x.qty)}</div></div>`).join('')}<div style="text-align:right;padding-top:14px" class="price"><small>${t('sub')} (${count()}):</small> ${money(sub)}</div></div>
  <div class="card sum"><p class="green" style="margin-top:0">✓ ${t('freeUS')}</p>
  <div class="r"><span>${t('sub')}</span><b>${money(sub)}</b></div><div class="r"><span>${t('ship')}</span><b>${shipCost(sub)?money(shipCost(sub)):t('free')}</b></div><div class="r t"><span>${t('total')}</span><span>${money(sub+shipCost(sub))}</span></div>
- <a class="btn block" style="margin-top:14px" href="#/checkout">${t('checkout')}</a><div class="secure">${ic('lock')} ${t('secure')}</div></div></div></div>`}
+ <a class="btn block" style="margin-top:14px" href="#/checkout">${t('checkout')}</a><div class="secure">${ic('lock')} ${t('secure')}</div>
+ ${user?'':`<div class="cartsign"><b>Sign in to pay</b><span class="small">Create your account with Google or Apple in one tap and go straight to payment.</span><div style="margin-top:12px"><div class="gsi-wrap" id="cartg"></div><button class="sso" onclick="sso('Google','checkout')">${GSVG}${t('google')}</button><button class="sso ap" onclick="sso('Apple','checkout')">${ASVG}${t('apple')}</button></div></div>`}</div></div></div>`;
+ if(!user){ssoNext='checkout';if(GOOGLE_CLIENT_ID)mountG('cartg',Math.min(300,Math.max(200,innerWidth-80)))}}
 function cq(i,d){cart[i].qty+=d;if(cart[i].qty<1)cart.splice(i,1);save('touliCart',cart);$('cn').textContent=count();pgCart()}
 function rm(i){cart.splice(i,1);save('touliCart',cart);$('cn').textContent=count();pgCart()}
 
 /* ================= AUTH ================= */
 const sha=async s=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)))].map(b=>b.toString(16).padStart(2,'0')).join('');
 function nextUrl(){let q=new URLSearchParams((location.hash.split('?')[1])||'');return q.get('next')||''}
-function pgAccount(){setTitle(t('signIn'));
+function pgAccount(){setTitle(t('signIn'));ssoNext='';
  if(user){$('app').innerHTML=`<div class="wrap"><div class="doc"><h1>Hello, ${esc(user.name)}</h1><div class="card"><p><b>${esc(user.email)}</b></p><a class="btn" href="#/orders">${t('orders')}</a> <button class="btn ghost" onclick="signOut()">${t('out')}</button></div></div></div>`;return}
  drawAuth('in')}
-function drawAuth(mode){drawAuthBase(mode);let c=document.querySelector('.sso:not(.ap)');if(c&&GOOGLE_CLIENT_ID){c.insertAdjacentHTML('beforebegin','<div class="gsi-wrap" id="gbtn"></div>');mountG()}}
+const GSVG=`<svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.4 30.2 0 24 0 14.6 0 6.5 5.400 2.600 13.200l7.800 6.100C12.300 13.600 17.700 9.500 24 9.500z"/><path fill="#4285F4" d="M46.500 24.500c0-1.600-.1-3.100-.4-4.500H24v9h12.700c-.6 3-2.300 5.500-4.800 7.200l7.500 5.800c4.400-4.100 7.100-10.100 7.100-17.500z"/><path fill="#FBBC05" d="M10.400 28.700A14.500 14.500 0 0 1 9.500 24c0-1.600.3-3.200.9-4.700l-7.800-6.100A24 24 0 0 0 0 24c0 3.900.9 7.500 2.600 10.800l7.800-6.100z"/><path fill="#34A853" d="M24 48c6.200 0 11.500-2 15.300-5.600l-7.500-5.800c-2 1.400-4.700 2.300-7.800 2.300-6.300 0-11.700-4.100-13.600-9.800l-7.800 6.100C6.500 42.600 14.600 48 24 48z"/></svg>`,ASVG=`<svg width="16" height="18" viewBox="0 0 384 512" fill="#fff"><path d="M318.700 268.700c-.2-36.700 16.400-64.400 50-84.800-18.800-26.900-47.200-41.700-84.700-44.600-35.500-2.800-74.300 20.700-88.500 20.700-15 0-49.400-19.700-76.400-19.700C63.300 141.200 4 184.800 4 273.500q0 39.300 14.400 81.200c12.800 36.700 59 126.700 107.200 125.200 25.200-.6 43-17.900 75.800-17.900 31.800 0 48.300 17.900 76.400 17.900 48.600-.7 90.400-82.500 102.600-119.300-65.200-30.700-61.700-90-61.700-91.900zm-56.600-164.200c27.300-32.400 24.800-61.900 24-72.500-24.100 1.400-52 16.400-67.900 34.900-17.500 19.800-27.800 44.300-25.600 71.900 26.100 2 49.900-11.400 69.500-34.300z"/></svg>`;
+let ssoNext='';
+function drawAuth(mode){drawAuthBase(mode);let c=document.querySelector('.sso:not(.ap)');if(c&&GOOGLE_CLIENT_ID){c.insertAdjacentHTML('beforebegin','<div class="gsi-wrap" id="gbtn"></div>');mountG('gbtn',Math.min(340,Math.max(220,innerWidth-90)))}}
 function drawAuthBase(mode){let up=mode==='up';$('app').innerHTML=`<div class="wrap"><div class="auth card"><div style="text-align:center"><img src="assets/logo.png" style="height:44px" alt=""></div><h2 style="margin-top:14px">${up?t('create'):t('signIn')}</h2>
- <button class="sso" onclick="sso('Google')"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.4 30.2 0 24 0 14.6 0 6.5 5.400 2.600 13.200l7.800 6.100C12.300 13.600 17.700 9.500 24 9.500z"/><path fill="#4285F4" d="M46.500 24.500c0-1.600-.1-3.100-.4-4.500H24v9h12.700c-.6 3-2.300 5.500-4.800 7.200l7.500 5.800c4.400-4.100 7.100-10.100 7.100-17.500z"/><path fill="#FBBC05" d="M10.400 28.700A14.500 14.500 0 0 1 9.500 24c0-1.600.3-3.200.9-4.700l-7.800-6.100A24 24 0 0 0 0 24c0 3.900.9 7.500 2.600 10.800l7.800-6.100z"/><path fill="#34A853" d="M24 48c6.200 0 11.500-2 15.300-5.600l-7.500-5.800c-2 1.400-4.700 2.300-7.800 2.300-6.300 0-11.700-4.100-13.600-9.800l-7.800 6.100C6.500 42.600 14.600 48 24 48z"/></svg>${t('google')}</button>
- <button class="sso ap" onclick="sso('Apple')"><svg width="16" height="18" viewBox="0 0 384 512" fill="#fff"><path d="M318.700 268.700c-.2-36.700 16.400-64.400 50-84.800-18.800-26.900-47.200-41.700-84.700-44.600-35.500-2.800-74.300 20.700-88.500 20.700-15 0-49.400-19.700-76.400-19.700C63.300 141.200 4 184.800 4 273.500q0 39.300 14.400 81.200c12.800 36.700 59 126.700 107.200 125.200 25.200-.6 43-17.900 75.800-17.900 31.800 0 48.300 17.900 76.400 17.900 48.600-.7 90.400-82.500 102.600-119.300-65.200-30.700-61.700-90-61.700-91.900zm-56.600-164.200c27.300-32.400 24.800-61.900 24-72.500-24.100 1.400-52 16.400-67.900 34.900-17.500 19.800-27.800 44.300-25.600 71.900 26.100 2 49.900-11.400 69.500-34.300z"/></svg>${t('apple')}</button>
+ <button class="sso" onclick="sso('Google')">${GSVG}${t('google')}</button>
+ <button class="sso ap" onclick="sso('Apple')">${ASVG}${t('apple')}</button>
  <div class="sep">${t('or')}</div><form onsubmit="return authSubmit(event,${up})">${up?`<input class="field" id="an" placeholder="${t('name')}" required autocomplete="name">`:''}<input class="field" id="ae" type="email" placeholder="${t('email')}" required autocomplete="email"><input class="field" id="ap" type="password" placeholder="${t('pw')}${up?' (min 8)':''}" required minlength="${up?8:1}" autocomplete="${up?'new-password':'current-password'}"><div class="err" id="aerr"></div><button class="btn block">${up?t('create'):t('signIn')}</button></form>
  <p class="small" style="text-align:center;margin-top:14px">${up?`Already have an account? <a href="#" onclick="drawAuth('in');return false">${t('signIn')}</a>`:`New to Touli Store? <a href="#" onclick="drawAuth('up');return false">${t('create')}</a>`}</p><p class="small" style="text-align:center"><a href="#/">You can browse and add to cart without an account →</a></p></div></div>`}
 async function authSubmit(e,up){e.preventDefault();let em=$('ae').value.trim().toLowerCase(),pw=$('ap').value,users=load('touliUsers',{});
  if(up){if(users[em])return $('aerr').textContent='An account with this email already exists.';users[em]={name:$('an').value.trim(),hash:await sha(pw)};save('touliUsers',users);login(em,users[em].name)}
  else{let u=users[em];if(!u||u.hash!==await sha(pw))return $('aerr').textContent='Incorrect email or password.';login(em,u.name)}return false}
-function sso(provider){ if(provider==='Google'&&GOOGLE_CLIENT_ID){oneTap();return}
- // Demo flow. Real Google/Apple sign-in needs the client IDs above + a backend to verify tokens.
- let em=prompt(provider+' sign-in (demo) — enter your email:');if(!em||!/^\S+@\S+\.\S+$/.test(em))return;login(em.toLowerCase(),em.split('@')[0])}
+function sso(provider,next){if(next!==undefined)ssoNext=next;
+ if(provider==='Google'){if(GOOGLE_CLIENT_ID)return oneTap();return demoSSO('Google')}
+ if(provider==='Apple'){if(APPLE_CLIENT_ID)return appleSignIn();return demoSSO('Apple')}}
+/* Shown only while the Google / Apple IDs are not configured yet (name + email, nothing is verified) */
+function demoSSO(pv){let m=$('ssoModal');if(!m){m=document.createElement('div');m.id='ssoModal';m.className='modal';m.onclick=e=>{if(e.target===m)m.classList.remove('open')};document.body.appendChild(m)}
+ m.innerHTML=`<div class="modalbox"><h3>${t(pv==='Google'?'google':'apple')}</h3><p class="small">${pv} sign-in is being connected. Enter your name and email to continue to checkout.</p><form onsubmit="return demoGo(event)"><input class="field" id="dn" placeholder="${t('name')}" required autocomplete="name" style="margin-bottom:10px"><input class="field" id="de" type="email" placeholder="${t('email')}" required autocomplete="email" style="margin-bottom:12px"><button class="btn block">${t('signIn')}</button></form></div>`;m.classList.add('open');setTimeout(()=>{let d=$('dn');d&&d.focus()},60)}
+function demoGo(e){e.preventDefault();let n=$('dn').value.trim(),em=$('de').value.trim().toLowerCase();$('ssoModal').classList.remove('open');login(em,n||em.split('@')[0]);return false}
+const jwtPayload=tk=>JSON.parse(decodeURIComponent(escape(atob(tk.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')))));
 
 /* ---- Google sign-in (One Tap + official button). Paste GOOGLE_CLIENT_ID at the top. ---- */
 let gReady=false;
 function loadGoogle(cb){if(!GOOGLE_CLIENT_ID)return;if(window.google&&google.accounts){cb&&cb();return}
  let sc=document.createElement('script');sc.src='https://accounts.google.com/gsi/client';sc.async=true;sc.onload=()=>cb&&cb();document.head.appendChild(sc)}
-function gInit(){if(gReady)return;google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:gCred,auto_select:true,cancel_on_tap_outside:true});gReady=true}
-function gCred(r){try{let p=JSON.parse(decodeURIComponent(escape(atob(r.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')))));
+function gInit(){if(gReady)return;google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:gCred,auto_select:false,cancel_on_tap_outside:true});gReady=true}
+function gCred(r){try{let p=jwtPayload(r.credential);
  /* verify r.credential on your server before trusting it for real accounts */
  login(p.email.toLowerCase(),p.name||p.email.split('@')[0])}catch(e){toast('Google sign-in failed')}}
 function oneTap(){if(!GOOGLE_CLIENT_ID||user)return;loadGoogle(()=>{gInit();google.accounts.id.prompt()})}
-function mountG(){loadGoogle(()=>{gInit();let h=document.getElementById('gbtn');if(!h)return;
- google.accounts.id.renderButton(h,{theme:'outline',size:'large',shape:'pill',width:300,text:'continue_with'});
- let c=document.querySelector('.sso:not(.ap)');if(c)c.style.display='none'})}
-function login(email,name){user={email,name};save('touliUser',user);renderChrome();toast('Signed in ✓');let n=nextUrl();location.hash=n?'#/'+n:'#/'}
+function mountG(id='gbtn',w=300){loadGoogle(()=>{gInit();let h=document.getElementById(id);if(!h)return;
+ google.accounts.id.renderButton(h,{theme:'outline',size:'large',shape:'pill',width:w,text:'continue_with'});
+ let c=h.nextElementSibling;if(c&&c.classList.contains('sso'))c.style.display='none'})}
+
+/* ---- Sign in with Apple (popup). Paste APPLE_CLIENT_ID (Services ID) at the top. ---- */
+let aReady=false;
+function loadApple(cb){if(window.AppleID){cb();return}let sc=document.createElement('script');sc.src='https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js';sc.async=true;sc.onload=cb;sc.onerror=()=>toast('Could not load Apple sign-in');document.head.appendChild(sc)}
+function appleSignIn(){loadApple(async()=>{try{
+ if(!aReady){AppleID.auth.init({clientId:APPLE_CLIENT_ID,scope:'name email',redirectURI:APPLE_REDIRECT_URI||(location.origin+location.pathname),usePopup:true});aReady=true}
+ const r=await AppleID.auth.signIn(),p=jwtPayload(r.authorization.id_token);
+ /* verify r.authorization.id_token on your server before trusting it for real accounts */
+ const nm=r.user&&r.user.name?[r.user.name.firstName,r.user.name.lastName].filter(Boolean).join(' '):'';
+ let names=load('touliAppleNames',{});if(nm){names[p.sub]=nm;save('touliAppleNames',names)}   // Apple only sends the name the first time
+ const em=((r.user&&r.user.email)||p.email||'').toLowerCase();if(!em){toast('Apple did not share an email address');return}
+ login(em,nm||names[p.sub]||em.split('@')[0])}
+ catch(e){if(e&&/popup_closed|user_cancelled|popup_blocked/.test(e.error||''))return;toast('Apple sign-in failed')}})}
+function login(email,name){user={email,name};save('touliUser',user);renderChrome();toast('Signed in ✓');let n=ssoNext||nextUrl();ssoNext='';location.hash=n?'#/'+n:'#/'}
 function signOut(){user=null;localStorage.removeItem('touliUser');renderChrome();location.hash='#/'}
 
 /* ================= CHECKOUT ================= */
@@ -450,6 +554,7 @@ let co={step:1,addr:load('touliAddr',{}),ship:'std'};
 function pgCheckout(){setTitle('Checkout');
  if(!cart.length){location.hash='#/cart';return}
  if(!user){location.hash='#/account?next=checkout';return}
+ if(!co.init){co.init=1;let a=co.addr;if(a.n&&a.a&&a.c&&a.z&&a.p&&a.k)co.step=2}
  coRender()}
 function coRender(){let sub=total(),sc=shipCost(sub,co.ship),a=co.addr;
  let st=(n,title,summary,body)=>`<div class="step ${co.step<n?'lock':''}"><div class="sh"><span><span class="num">${n}</span>${title}</span>${co.step>n?`<span style="font-weight:400;font-size:13px;text-align:right">${summary}</span><a style="font-size:12px;color:#0a6ab5;cursor:pointer" onclick="co.step=${n};coRender()">Change</a>`:''}</div>${co.step===n?`<div class="sb">${body}</div>`:''}</div>`;
@@ -457,8 +562,8 @@ function coRender(){let sub=total(),sc=shipCost(sub,co.ship),a=co.addr;
  ${st(1,t('stepA'),esc((a.n||'')+', '+(a.a||'')+', '+(a.c||'')),`<form id="af" onsubmit="return coAddr(event)"><label class="fl">${t('name')}<input class="field" name="n" required autocomplete="name" value="${esc(a.n||user.name)}"></label><div class="two"><label class="fl">${t('email')}<input class="field" name="e" type="email" required autocomplete="email" value="${esc(a.e||user.email)}"></label><label class="fl">Phone<input class="field" name="p" type="tel" required autocomplete="tel" value="${esc(a.p||'')}"></label></div><label class="fl">Street address<input class="field" name="a" required autocomplete="street-address" value="${esc(a.a||'')}"></label><div class="two"><label class="fl">City<input class="field" name="c" required value="${esc(a.c||'')}"></label><label class="fl">State / Province<input class="field" name="s" value="${esc(a.s||'')}"></label></div><div class="two"><label class="fl">ZIP / postal code<input class="field" name="z" required value="${esc(a.z||'')}"></label><label class="fl">Country<input class="field" name="k" required autocomplete="country-name" value="${esc(a.k||'United States')}"></label></div><p class="small">${t('usNote')}</p><button class="btn">Use this address</button></form>`)}
  ${st(2,t('stepD'),co.ship==='exp'?t('expd'):t('stdd'),`<div class="radio ${co.ship==='std'?'on':''}" onclick="co.ship='std';coRender()"><input type="radio" ${co.ship==='std'?'checked':''}><div><b>${t('stdd')} — ${shipCost(sub)?money(STORE.std):t('free')}</b><span class="small">Estimated 5–10 business days after design approval</span></div></div><div class="radio ${co.ship==='exp'?'on':''}" onclick="co.ship='exp';coRender()"><input type="radio" ${co.ship==='exp'?'checked':''}><div><b>${t('expd')} — ${money(STORE.exp)}</b><span class="small">Estimated 2–4 business days after design approval</span></div></div><button class="btn" onclick="co.step=3;coRender()">Continue</button>`)}
  ${st(3,t('stepP'),'',`<div id="pay"></div><div class="secure">${ic('lock')} ${t('secure')}</div>`)}
- </div><div class="card sum" style="position:sticky;top:14px"><h3>Order summary</h3>${cart.map(x=>`<div class="r" style="font-size:12px"><span>${esc(x.name)} × ${x.qty}</span><span>${money(x.price*x.qty)}</span></div>`).join('')}<div class="r" style="border-top:1px solid var(--line);margin-top:8px"><span>${t('sub')}</span><b>${money(sub)}</b></div><div class="r"><span>${t('ship')}</span><b>${sc?money(sc):t('free')}</b></div><div class="r t"><span>${t('total')}</span><span>${money(sub+sc)}</span></div></div></div></div>`;
- if(co.step===3)initPay()}
+ </div><div class="card sum" style="position:sticky;top:14px"><h3>Order summary</h3>${cart.map(x=>`<div style="padding:5px 0"><div class="r" style="font-size:12px;padding:0"><span>${esc(x.name)} × ${x.qty}</span><span>${money(x.price*x.qty)}</span></div><div class="small" style="line-height:1.5">${lineOpts(x)}</div></div>`).join('')}<div class="r" style="border-top:1px solid var(--line);margin-top:8px"><span>${t('sub')}</span><b>${money(sub)}</b></div><div class="r"><span>${t('ship')}</span><b>${sc?money(sc):t('free')}</b></div><div class="r t"><span>${t('total')}</span><span>${money(sub+sc)}</span></div></div></div></div>`;
+ if(co.step===3){initPay();setTimeout(()=>{let e=$('pay');e&&e.scrollIntoView({behavior:'smooth',block:'center'})},80)}}
 function coAddr(e){e.preventDefault();co.addr=Object.fromEntries(new FormData($('af')));save('touliAddr',co.addr);co.step=2;coRender();return false}
 function finishOrder(method){let sub=total(),sc=shipCost(sub,co.ship);let o={id:'TS'+Date.now().toString().slice(-8),date:new Date().toISOString(),items:cart.map(x=>({...x,thumb:''})),sub,ship:sc,total:sub+sc,addr:co.addr,method,email:user.email};orders.unshift(o);save('touliOrders',orders);cart=[];save('touliCart',cart);co.step=1;$('cn').textContent=0;location.hash='#/order/'+o.id}
 function initPay(){const P=$('pay');if(!P)return;
